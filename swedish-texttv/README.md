@@ -115,7 +115,13 @@ Refresh rate: Every 15 minutes
 
 ## Installation
 
-1. Ensure you have `trmnlp` installed:
+### Prerequisites
+
+- **Ruby 3.x or higher** - [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/)
+
+### Steps
+
+1. Install the TRMNL local development server:
 ```bash
 gem install trmnl_preview
 ```

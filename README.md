@@ -35,16 +35,19 @@ Display classic SVT Text-TV (teletext) pages in authentic monospace styling.
 
 ### Prerequisites
 
-Install the TRMNL local development server:
+**Required:**
+- **Ruby 3.x or higher** - [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/)
+
+**Optional (for PNG rendering):**
+- Firefox
+- ImageMagick
+
+Once Ruby is installed, install the TRMNL local development server:
 
 ```bash
 # Install trmnl_preview (provides the trmnlp command)
 gem install trmnl_preview
 ```
-
-**Requirements:**
-- Ruby 3.x or higher
-- Optional: Firefox and ImageMagick (for PNG rendering)
 
 ### Local Development
 
