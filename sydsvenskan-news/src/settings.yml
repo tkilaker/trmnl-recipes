@@ -8,5 +8,12 @@ polling_url: https://www.sydsvenskan.se/feeds/feed.xml
 polling_headers: 
 polling_body: 
 id: 176724
+custom_fields:
+- keyname: author_bio
+  name: About This Plugin
+  field_type: author_bio
+  description: Sydsvenskan Latest News was created by Tim.
+  github_url: https://github.com/tkilaker/trmnl-recipes
+  email_address: tkilaker@icloud.com
 name: Sydsvenskan Latest News
 refresh_interval: 30

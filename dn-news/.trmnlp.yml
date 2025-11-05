@@ -1,0 +1,37 @@
+watch:
+  - src/**/*.liquid
+  - src/settings.yml
+
+custom_fields:
+  news_count: 8
+
+time_zone: Europe/Stockholm
+
+variables:
+  rss:
+    channel:
+      item:
+        - title: "Rapport: Pengar inte viktigast för ökad återvandring"
+          description: "UMEÅ. Regeringen höjer återvandringsbidraget rejält. Men pengar har en begränsad betydelse för att folk ska lämna Sverige friviligt, enligt en rapport som DN tagit del av. – Folk behöver känna att det finns något att komma tillbaka till, säger experten Leila Pacula Nielsen på Migrationsverket."
+          pubDate: "2025-11-05T19:09:34+01:00"
+        - title: "Frankrike blockerar kritiserade handelsjätten Shein"
+          description: "Demonstranter och kunder samlades på onsdagen i Paris inför invigningen av e-handelsjätten Sheins första butik i staden. Kort efter invigningen meddelade Frankrikes premiärminister Sebastien Lecornu att landet inlett en process för att blockera tillgången till den kinesiska modesajten. Beslutet kommer i kölvattnet av att Shein sålt sexdockor som föreställer barn."
+          pubDate: "2025-11-05T18:47:45+01:00"
+        - title: "Skottlossning i västra Stockholm – man livshotande skadad"
+          description: "En man har livshotande skador efter en skjutning i Bromma i västra Stockholm. Polisen söker efter en eller flera gärningsmän, som misstänks ha lämnat platsen i en bil. – Jag hörde flera skott, säger en boende till DN."
+          pubDate: "2025-11-05T18:38:15+01:00"
+        - title: "Kajsa Haidl: Pinsamt med pojkvän? Inte enligt Jennifer Aniston"
+          description: "En flitigt delad artikel i brittiska Vogue undersöker varför det har blivit pinsamt att posta sin kille i sociala medier. Men det finns fortfarande en kändis som går mot strömmen och vågar hårdlansera sin pojkvän, skriver Kajsa Haidl."
+          pubDate: "2025-11-05T18:04:07+01:00"
+        - title: "Lindgren ska försvara VM-guldet: \"Det som kan stoppa mig är hjärnspökena\""
+          description: "Efter VM-guldet 2023 och OS-silvret 2024 har den svenska skytten Victor Lindgren fått ökad uppmärksamhet. När han nu ska försvara sitt VM-guld är den största utmaningen att hantera pressen. – Det som kan stoppa mig är väl hjärnspökena, säger han."
+          pubDate: "2025-11-05T18:02:01+01:00"
+        - title: "Larmen inifrån växande anstalten: \"Tickande bomb\""
+          description: "Personal hotar att lämna Österåkeranstalten efter invigningen av åtta nya avdelningar. De anställda vittnar om en krisartad personalbrist som har lett till säkerhetsrisker för både intagna och personal. – Det kommer snart hända något allvarligt, säger kriminalvårdaren Simon."
+          pubDate: "2025-11-05T17:50:23+01:00"
+        - title: "En part vill dra sig ur striden om JLC-guldet"
+          description: "De två hantverkare som hittade guldtackor i ett lönnfack på en vind i Mölndal 2023 vill dra sig ur tvisten om fyndet, rapporterar Göteborgs-Posten."
+          pubDate: "2025-11-05T17:26:43+01:00"
+        - title: "C-toppen i Göteborg: Riv delar av miljonprogrammet"
+          description: "Vissa delar av miljonprogrammet behöver rivas – även i en storstad där det råder bostadsbrist. Det anser Centerpartiet i Göteborg. – Vi måste kunna prata om elefanten i rummet och vara konkreta. Det kan alltså finnas skäl att, från fall till fall, riva strategiskt i miljonprogrammet, säger C-ledaren Emmyly Bönfors."
+          pubDate: "2025-11-05T17:13:32+01:00"

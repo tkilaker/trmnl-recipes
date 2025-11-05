@@ -1,0 +1,17 @@
+---
+strategy: polling
+no_screen_padding:
+dark_mode:
+static_data:
+polling_verb: GET
+polling_url: https://www.dn.se/rss/
+polling_headers:
+polling_body:
+id: 176725
+name: DN Latest News
+refresh_interval: 30
+fields:
+  - keyname: author_bio
+    name: Author Information
+    field_type: author_bio
+    github_url: https://github.com/timkilaker/trmnl-recipes

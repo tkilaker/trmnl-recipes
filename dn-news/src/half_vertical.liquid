@@ -1,0 +1,67 @@
+{% comment %}
+DN News - Half Vertical Layout
+Compact news display for vertical split
+{% endcomment %}
+
+{% comment %} View config {% endcomment %}
+{% assign max_height = 380 %}
+{% assign show_elapsed = true %}
+{% assign show_more_label = false %}
+
+{% comment %} Get configuration {% endcomment %}
+{% assign news_limit = 6 %}
+{% assign latest_feed = rss %}
+{% assign now_date = 'now' | date: '%s' %}
+
+<div class="layout">
+  <div class="list gap--small" data-list-limit="true" data-list-max-height="{{ max_height }}" data-list-hidden-count="{{ show_more_label }}">
+    {% if latest_feed.channel.item %}
+      {% for item in latest_feed.channel.item limit: news_limit %}
+        {% liquid
+        if show_elapsed
+          assign pub_date_timestamp = item.pubDate | date: '%s'
+          assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
+          if elapsed > 86400
+            assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
+          elsif elapsed > 3600
+            assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
+          else
+            assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
+          endif
+        endif
+        %}
+        <div class="item gap--xsmall">
+          <div class="meta">
+            <span class="index"></span>
+          </div>
+          <div class="content stretch">
+            <div class="flex gap--xsmall">
+              {% liquid
+              assign title_text = item.title | strip_html
+              if show_elapsed
+                assign title_text = title_text | append: " (" | append: elapsed_str | append: ")"
+              endif
+              %}
+              <span class="title title--small truncate-none">{{ title_text }}</span>
+            </div>
+            {% assign desc_content = item.description | default: item.abstract | default: item.summary | default: "" %}
+            {% if desc_content != "" %}
+              <div class="flex gap--xsmall">
+                <span class="description text--xs clamp--1" style="word-break: break-word">{{ desc_content | strip_html }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="text--xs text--gray-3">Inga nyheter</div>
+    {% endif %}
+  </div>
+</div>
+<div class="title_bar">
+  <span class="title title--small">
+    <img src="https://cdn.dn-static.se/images/favicons/32-NQBIGKWZ.png" width="18" height="18" style="display: inline-block; vertical-align: middle; margin-right: 3px;">
+    DN.se
+  </span>
+  <span class="instance text--xs">{{ 'now' | date: '%H:%M' }}</span>
+</div>

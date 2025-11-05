@@ -1,0 +1,38 @@
+{% comment %}
+DN News - Quadrant Layout
+Minimal news display for quarter screen
+{% endcomment %}
+
+{% comment %} View config {% endcomment %}
+{% assign max_height = 160 %}
+{% assign show_elapsed = false %}
+{% assign show_more_label = false %}
+
+{% comment %} Get configuration {% endcomment %}
+{% assign news_limit = 3 %}
+{% assign latest_feed = rss %}
+
+<div class="layout">
+  <div class="list gap--xsmall" data-list-limit="true" data-list-max-height="{{ max_height }}" data-list-hidden-count="{{ show_more_label }}">
+    {% if latest_feed.channel.item %}
+      {% for item in latest_feed.channel.item limit: news_limit %}
+        <div class="item gap--xsmall">
+          <div class="meta">
+            <span class="index"></span>
+          </div>
+          <div class="content stretch">
+            <span class="title title--xsmall truncate-none">{{ item.title | strip_html }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="text--xs text--gray-3">Inga nyheter</div>
+    {% endif %}
+  </div>
+</div>
+<div class="title_bar">
+  <span class="title text--xs">
+    <img src="https://cdn.dn-static.se/images/favicons/32-NQBIGKWZ.png" width="14" height="14" style="display: inline-block; vertical-align: middle; margin-right: 2px;">
+    DN
+  </span>
+</div>
