@@ -117,8 +117,9 @@ Refresh rate: Every 15 minutes
 
 1. Ensure you have `trmnlp` installed:
 ```bash
-gem install trmnlp
+gem install trmnl_preview
 ```
+   (This installs the `trmnlp` command)
 
 2. Navigate to this recipe directory:
 ```bash
