@@ -8,15 +8,6 @@ strategy: polling
 polling_verb: GET
 polling_url: https://www.sydsvenskan.se/feeds/feed.xml
 
-custom_fields:
-  - keyname: news_count
-    name: Number of news items
-    field_type: integer
-    min: 1
-    max: 15
-    default: 10
-    help_text: How many news items to display
-
 refresh_interval: 30
 
 layouts:

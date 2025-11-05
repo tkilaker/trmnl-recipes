@@ -9,18 +9,11 @@ Display the latest Swedish news from Sydsvenskan newspaper on your TRMNL e-ink d
 - **Elapsed time indicators** - Displays "(3h sedan)" directly in headlines
 - **Update timestamps** - Shows when the feed was last refreshed
 - **Automatic numbering** - Clean numbered list with index markers
-- **Configurable display** - Choose how many items to show (1-15)
+- **Optimized display** - Shows top 10 news items
 - **Real-time updates** - Fetches from Sydsvenskan RSS feed every 30 minutes
 - **Swedish time formatting** - Displays timestamps in Europe/Stockholm timezone
 - **Full-screen layout** - Optimized for full TRMNL display
 - **E-ink optimized** - High contrast, clear typography perfect for e-ink displays
-
-## Configuration Options
-
-### Number of news items
-- **Type:** Integer (1-15)
-- **Default:** 10
-- **Description:** How many news articles to display
 
 ## Data Source
 
@@ -33,7 +26,7 @@ Refresh rate: Every 30 minutes
 ## Layout
 
 The full-screen layout includes:
-- Up to 15 news items with full descriptions
+- 10 latest news items with full descriptions
 - Sydsvenskan's official knight logo and branding
 - "Uppdaterad YYYY-MM-DD HH:MM" timestamp showing last refresh
 - Each article displays: numbered index, headline with elapsed time, and description (2-line clamp)
@@ -69,12 +62,7 @@ trmnlp push
 
 ## Local Development
 
-The `.trmnlp.yml` file contains mock data for local testing. You can modify the `custom_fields` section to test different configurations:
-
-```yaml
-custom_fields:
-  news_count: 8
-```
+The `.trmnlp.yml` file contains mock data for local testing with sample news articles.
 
 ## Troubleshooting
 
@@ -90,7 +78,7 @@ custom_fields:
 
 ### Items cut off
 - Descriptions automatically clamp to 2 lines to ensure proper display
-- Adjust `news_count` to show fewer items if needed
+- The layout is optimized to show 10 items comfortably within the display height
 
 ## Technical Details
 

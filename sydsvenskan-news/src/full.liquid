@@ -9,7 +9,7 @@ Single column layout with news stories and descriptions
 {% assign show_more_label = false %}
 
 {% comment %} Get configuration {% endcomment %}
-{% assign news_limit = custom_fields.news_count | default: 10 %}
+{% assign news_limit = 10 %}
 {% assign latest_feed = rss %}
 {% assign now_date = 'now' | date: '%s' %}
 
