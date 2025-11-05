@@ -20,11 +20,9 @@ Minimal quarter-screen display
       {% assign items = latest_feed.channel.item | slice: 0, news_limit %}
       {% for item in items %}
         <div class="item">
-          <div class="content">
-            <div class="title text--sm clamp clamp--1">
-              {{ item.title | strip_html }}
-            </div>
-          </div>
+          <p class="text--sm clamp clamp--1">
+            {{ item.title | strip_html }}
+          </p>
         </div>
       {% endfor %}
     {% else %}
