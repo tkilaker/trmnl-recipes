@@ -4,55 +4,34 @@ watch:
 
 custom_fields:
   news_count: 8
-  right_column: sport
 
 time_zone: Europe/Stockholm
 
 variables:
-  data:
-    - channel:
-        item:
-          - title: "Nya regler för elbilar träder i kraft"
-            description: "Regeringen inför nya stödregler för elbilar från och med 1 januari. De nya reglerna förväntas öka försäljningen med 25 procent nästa år."
-            pubDate: "2025-11-05T08:30:00+01:00"
-          - title: "Kommunen investerar i ny skola"
-            description: "Malmö stad satsar 450 miljoner kronor på att bygga en ny grundskola i Rosengård. Bygget startar nästa höst och skolan beräknas stå klar 2028."
-            pubDate: "2025-11-05T08:15:00+01:00"
-          - title: "Stormen orsakade strömavbrott"
-            description: "Över 5000 hushåll i Skåne drabbades av strömavbrott när stormen drog in över länet under natten. E.ON arbetar med att återställa elen."
-            pubDate: "2025-11-05T07:45:00+01:00"
-          - title: "Malmö FF vinner viktig match"
-            description: "MFF besegrade Göteborg med 2-1 i en dramatisk match på Stadion. Segern innebär att laget klättrar till andra plats i tabellen."
-            pubDate: "2025-11-05T07:30:00+01:00"
-          - title: "Priser på bensin fortsätter stiga"
-            description: "Bensinpriset har stigit med 45 öre per liter den senaste veckan. Preem och Circle K höjer nu priserna ytterligare från midnatt."
-            pubDate: "2025-11-05T07:00:00+01:00"
-          - title: "Ny restaurang öppnar på Möllevången"
-            description: "En ny vegetarisk restaurang med fokus på nordisk matkultur öppnar på Möllevången i slutet av månaden. Menyn bygger på ekologiska och lokala råvaror."
-            pubDate: "2025-11-05T06:45:00+01:00"
-          - title: "Trafikkaos efter olycka på E22"
-            description: "En trafikolycka med tre inblandade bilar orsakade långa köer på E22 under morgontrafiken. Vägen har nu öppnats igen men restider är fortfarande längre än normalt."
-            pubDate: "2025-11-05T06:30:00+01:00"
-          - title: "Kulturhuset presenterar höstprogram"
-            description: "Malmö kulturhus presenterar ett innehållsrikt höstprogram med konst, musik och teater. Bland höjdpunkterna finns utställningen om svensk design genom tiderna."
-            pubDate: "2025-11-05T06:15:00+01:00"
-    - channel:
-        item:
-          - title: "Malmö FF klart för semifinal"
-            description: "Efter segern mot IFK Göteborg är Malmö FF klart för semifinal i Svenska Cupen. Laget möter Djurgården i dubbelmöte nästa månad."
-            pubDate: "2025-11-05T09:00:00+01:00"
-          - title: "Svensk seger i skidskytte"
-            description: "Hanna Öberg tog en överlägsen seger i världscupspremären i skidskytte i Finland. Det var hennes första seger sedan OS i fjol."
-            pubDate: "2025-11-05T08:45:00+01:00"
-          - title: "Handbollslaget förlorade borta"
-            description: "IFK Kristianstad förlorade bortamötet mot Aalborg med 28-31 i Champions League. Trots förlusten har laget fortfarande goda chanser att gå vidare."
-            pubDate: "2025-11-05T08:30:00+01:00"
-          - title: "Ny tränare för IFK Malmö"
-            description: "IFK Malmö FF presenterar Anders Johansson som ny huvudtränare. Han kommer närmast från Utsiktens BK och har skrivit på ett treårskontrakt."
-            pubDate: "2025-11-05T08:00:00+01:00"
-          - title: "Rekordpublik på ishockeymatchen"
-            description: "8547 åskådare såg Malmö Redhawks vinna mot Färjestad med 4-2 på Malmö Arena. Det är säsongens högsta publiksiffra i SHL."
-            pubDate: "2025-11-05T07:45:00+01:00"
-          - title: "Fotbollsspelaren skadad i träning"
-            description: "MFF:s mittfältare Isaac Kiese Thelin tvingades avbryta träningen efter en smäll mot knäet. Undersökningar pågår för att fastställa skadans omfattning."
-            pubDate: "2025-11-05T07:30:00+01:00"
+  rss:
+    channel:
+      item:
+        - title: "Nya regler för elbilar träder i kraft"
+          description: "Regeringen inför nya stödregler för elbilar från och med 1 januari. De nya reglerna förväntas öka försäljningen med 25 procent nästa år."
+          pubDate: "2025-11-05T08:30:00+01:00"
+        - title: "Kommunen investerar i ny skola"
+          description: "Malmö stad satsar 450 miljoner kronor på att bygga en ny grundskola i Rosengård. Bygget startar nästa höst och skolan beräknas stå klar 2028."
+          pubDate: "2025-11-05T08:15:00+01:00"
+        - title: "Stormen orsakade strömavbrott"
+          description: "Över 5000 hushåll i Skåne drabbades av strömavbrott när stormen drog in över länet under natten. E.ON arbetar med att återställa elen."
+          pubDate: "2025-11-05T07:45:00+01:00"
+        - title: "Malmö FF vinner viktig match"
+          description: "MFF besegrade Göteborg med 2-1 i en dramatisk match på Stadion. Segern innebär att laget klättrar till andra plats i tabellen."
+          pubDate: "2025-11-05T07:30:00+01:00"
+        - title: "Priser på bensin fortsätter stiga"
+          description: "Bensinpriset har stigit med 45 öre per liter den senaste veckan. Preem och Circle K höjer nu priserna ytterligare från midnatt."
+          pubDate: "2025-11-05T07:00:00+01:00"
+        - title: "Ny restaurang öppnar på Möllevången"
+          description: "En ny vegetarisk restaurang med fokus på nordisk matkultur öppnar på Möllevången i slutet av månaden. Menyn bygger på ekologiska och lokala råvaror."
+          pubDate: "2025-11-05T06:45:00+01:00"
+        - title: "Trafikkaos efter olycka på E22"
+          description: "En trafikolycka med tre inblandade bilar orsakade långa köer på E22 under morgontrafiken. Vägen har nu öppnats igen men restider är fortfarande längre än normalt."
+          pubDate: "2025-11-05T06:30:00+01:00"
+        - title: "Kulturhuset presenterar höstprogram"
+          description: "Malmö kulturhus presenterar ett innehållsrikt höstprogram med konst, musik och teater. Bland höjdpunkterna finns utställningen om svensk design genom tiderna."
+          pubDate: "2025-11-05T06:15:00+01:00"

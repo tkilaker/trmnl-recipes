@@ -1,38 +1,23 @@
+---
 title: Sydsvenskan News
 author: TRMNL Recipes
 category: news
 icon: newspaper
 
 strategy: polling
-
-polling:
-  - https://sydsvenskan.se/feeds/feed.xml
-  - https://sydsvenskan.se/feeds/section/sport
+polling_verb: GET
+polling_url: https://www.sydsvenskan.se/feeds/feed.xml
 
 custom_fields:
-  - name: news_count
-    label: Number of news items per column
-    type: integer
+  - keyname: news_count
+    name: Number of news items
+    field_type: integer
     min: 1
-    max: 10
+    max: 15
     default: 10
-    help_text: How many news items to display in each column
+    help_text: How many news items to display
 
-  - name: right_column
-    label: Right column content
-    type: select
-    options:
-      - label: Sport
-        value: sport
-      - label: Latest News
-        value: latest
-    default: sport
-    help_text: Choose what to display in the right column
-
-refresh: 30
+refresh_interval: 30
 
 layouts:
   - full
-  - half_vertical
-  - half_horizontal
-  - quadrant

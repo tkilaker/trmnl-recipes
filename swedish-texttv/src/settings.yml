@@ -9,17 +9,17 @@ polling:
   - https://api.texttv.nu/api/get/100?app=trmnl-texttv&includePlainTextContent=1
 
 custom_fields:
-  - name: page_number
-    label: Text-TV Page Number
-    type: integer
+  - keyname: page_number
+    name: Text-TV Page Number
+    field_type: integer
     min: 100
     max: 899
     default: 100
     help_text: Which Text-TV page to display (100-899)
 
-  - name: show_subpages
-    label: Show subpages
-    type: boolean
+  - keyname: show_subpages
+    name: Show subpages
+    field_type: boolean
     default: false
     help_text: Display subpages if available (note - may require additional API calls)
 
