@@ -10,7 +10,7 @@ Minimal quarter-screen display
 
 {% comment %} Get configuration - max 4 items for quadrant {% endcomment %}
 {% assign news_limit = 4 %}
-{% assign latest_feed = data[0] %}
+{% assign latest_feed = rss %}
 {% assign now_date = 'now' | date: '%s' %}
 
 <div class="view view--quadrant">
@@ -38,7 +38,13 @@ Minimal quarter-screen display
             </div>
             <div class="content stretch">
               <div class="flex gap--xsmall">
-                <span class="title title--small truncate-none">{{ item.title | strip_html }}</span>
+                {% liquid
+                assign title_text = item.title | strip_html
+                if show_elapsed
+                  assign title_text = title_text | append: " (" | append: elapsed_str | append: " sedan)"
+                endif
+                %}
+                <span class="title title--small truncate-none">{{ title_text }}</span>
               </div>
             </div>
           </div>

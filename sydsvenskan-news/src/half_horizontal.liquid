@@ -10,7 +10,7 @@ Compact layout for horizontal split-screen
 
 {% comment %} Get configuration - max 6 items for horizontal half {% endcomment %}
 {% assign news_limit = 6 %}
-{% assign latest_feed = data[0] %}
+{% assign latest_feed = rss %}
 {% assign now_date = 'now' | date: '%s' %}
 
 <div class="view view--half_horizontal">
@@ -38,21 +38,17 @@ Compact layout for horizontal split-screen
             </div>
             <div class="content stretch">
               <div class="flex gap--xsmall">
-                <span class="title title--small truncate-none">{{ item.title | strip_html }}</span>
+                {% liquid
+                assign title_text = item.title | strip_html
+                if show_elapsed
+                  assign title_text = title_text | append: " (" | append: elapsed_str | append: " sedan)"
+                endif
+                %}
+                <span class="title title--small truncate-none">{{ title_text }}</span>
               </div>
               {% if item.description %}
                 <div class="flex gap--xsmall">
-                  {% liquid
-                  assign description = item.description | strip_html
-                  if show_elapsed
-                    assign description = description | append: " (" | append: elapsed_str | append: " sedan)"
-                  endif
-                  %}
-                  <span class="description clamp--1" style="word-break: break-word">{{ description }}</span>
-                </div>
-              {% elsif show_elapsed %}
-                <div class="flex gap--xsmall">
-                  <span class="description text--sm text--gray-3">{{ elapsed_str }} sedan</span>
+                  <span class="description clamp--1" style="word-break: break-word">{{ item.description | strip_html }}</span>
                 </div>
               {% endif %}
             </div>
@@ -65,6 +61,6 @@ Compact layout for horizontal split-screen
   </div>
   <div class="title_bar">
     <span class="title">Sydsvenskan</span>
-    <span class="instance">Senaste nytt</span>
+    <span class="instance">Senaste nytt · Uppdaterad {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
   </div>
 </div>
