@@ -1,0 +1,89 @@
+{% comment %}
+Sydsvenskan News - Full Layout
+Two-column layout with latest news and sport/business
+{% endcomment %}
+
+<div class="view view--full">
+  <div class="layout">
+
+    {% comment %} Title Bar {% endcomment %}
+    <div class="title-bar">
+      <h1 class="title-bar__title">Sydsvenskan</h1>
+      <span class="title-bar__subtitle">{{ "now" | date: "%H:%M" }}</span>
+    </div>
+
+    {% comment %} Get configuration {% endcomment %}
+    {% assign news_limit = custom_fields.news_count | default: 10 %}
+    {% assign latest_feed = data[0] %}
+    {% assign sport_feed = data[1] %}
+
+    {% comment %} Determine right column content {% endcomment %}
+    {% assign right_column_type = custom_fields.right_column | default: "sport" %}
+    {% if right_column_type == "sport" %}
+      {% assign right_feed = sport_feed %}
+      {% assign right_label = "Sport" %}
+    {% else %}
+      {% assign right_feed = latest_feed %}
+      {% assign right_label = "Senaste nytt" %}
+    {% endif %}
+
+    {% comment %} Two Column Layout {% endcomment %}
+    <div class="columns">
+
+      {% comment %} Left Column - Latest News {% endcomment %}
+      <div class="column">
+        <div class="label label--underline">Senaste nytt</div>
+
+        {% if latest_feed.channel.item %}
+          <div class="list" data-list-limit="true">
+            {% assign left_items = latest_feed.channel.item | slice: 0, news_limit %}
+            {% for item in left_items %}
+              <div class="item item--compact">
+                <div class="item__body">
+                  <div class="item__title clamp clamp--2">
+                    {{ item.title | strip_html }}
+                  </div>
+                  <div class="description text--sm text--gray-3">
+                    {{ item.pubDate | date: "%H:%M" }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
+        {% endif %}
+      </div>
+
+      {% comment %} Vertical Divider {% endcomment %}
+      <div class="divider divider--vertical"></div>
+
+      {% comment %} Right Column - Sport or Latest {% endcomment %}
+      <div class="column">
+        <div class="label label--underline">{{ right_label }}</div>
+
+        {% if right_feed.channel.item %}
+          <div class="list" data-list-limit="true">
+            {% assign right_items = right_feed.channel.item | slice: 0, news_limit %}
+            {% for item in right_items %}
+              <div class="item item--compact">
+                <div class="item__body">
+                  <div class="item__title clamp clamp--2">
+                    {{ item.title | strip_html }}
+                  </div>
+                  <div class="description text--sm text--gray-3">
+                    {{ item.pubDate | date: "%H:%M" }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+</div>

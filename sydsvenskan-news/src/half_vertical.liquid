@@ -1,0 +1,46 @@
+{% comment %}
+Sydsvenskan News - Half Vertical Layout
+Single column for split-screen vertical display
+{% endcomment %}
+
+<div class="view view--half_vertical">
+  <div class="layout">
+
+    {% comment %} Title Bar {% endcomment %}
+    <div class="title-bar">
+      <h1 class="title-bar__title">Sydsvenskan</h1>
+      <span class="title-bar__subtitle">{{ "now" | date: "%H:%M" }}</span>
+    </div>
+
+    {% comment %} Get configuration - max 8 items for vertical half {% endcomment %}
+    {% assign news_limit = custom_fields.news_count | default: 8 %}
+    {% if news_limit > 8 %}
+      {% assign news_limit = 8 %}
+    {% endif %}
+    {% assign latest_feed = data[0] %}
+
+    {% comment %} News List {% endcomment %}
+    <div class="label label--underline">Senaste nytt</div>
+
+    {% if latest_feed.channel.item %}
+      <div class="list" data-list-limit="true">
+        {% assign items = latest_feed.channel.item | slice: 0, news_limit %}
+        {% for item in items %}
+          <div class="item item--compact">
+            <div class="item__body">
+              <div class="item__title clamp clamp--2">
+                {{ item.title | strip_html }}
+              </div>
+              <div class="description text--sm text--gray-3">
+                {{ item.pubDate | date: "%H:%M" }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
+    {% endif %}
+
+  </div>
+</div>

@@ -1,0 +1,22 @@
+# TRMNL-specific
+*.png
+.trmnlp/
+screenshots/
+
+# Editor files
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Config files (contains secrets)
+config.yml
+.env
+.env.*
+
+# Dependencies
+node_modules/
+vendor/bundle/
+
+# OS files
+Thumbs.db

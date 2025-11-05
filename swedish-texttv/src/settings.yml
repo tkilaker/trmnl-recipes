@@ -1,0 +1,32 @@
+title: Swedish Text-TV
+author: TRMNL Recipes
+category: news
+icon: television
+
+strategy: polling
+
+polling:
+  - https://api.texttv.nu/api/get/100?app=trmnl-texttv&includePlainTextContent=1
+
+custom_fields:
+  - name: page_number
+    label: Text-TV Page Number
+    type: integer
+    min: 100
+    max: 899
+    default: 100
+    help_text: Which Text-TV page to display (100-899)
+
+  - name: show_subpages
+    label: Show subpages
+    type: boolean
+    default: false
+    help_text: Display subpages if available (note - may require additional API calls)
+
+refresh: 15
+
+layouts:
+  - full
+  - half_vertical
+  - half_horizontal
+  - quadrant

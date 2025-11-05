@@ -1,0 +1,39 @@
+watch:
+  - src/**/*.liquid
+  - src/settings.yml
+
+custom_fields:
+  page_number: 100
+  show_subpages: false
+
+time_zone: Europe/Stockholm
+
+variables:
+  data:
+    - num: 100
+      title: "Innehåll"
+      content: "<div>SVT Text-TV page content here</div>"
+      content_plain: |
+        100                SVT Text-TV             2025-11-05 08:30
+
+
+                              INNEHÅLL
+
+
+        101   Sport och idrott
+        200   Inrikes nyheter
+        300   Utrikes nyheter
+        400   Kultur och nöje
+        500   Ekonomi
+        600   Väder
+        700   Sport resultat
+
+
+        Senaste nyheterna:
+
+        • Nya regler för elbilar träder i kraft idag
+        • Stormen orsakade omfattande strömavbrott
+        • Regeringen presenterar ny klimatplan
+
+
+        [Navigera: 101-899]

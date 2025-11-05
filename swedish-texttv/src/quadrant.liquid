@@ -1,0 +1,42 @@
+{% comment %}
+Swedish Text-TV - Quadrant Layout
+Minimal Text-TV display for quarter screen
+{% endcomment %}
+
+<div class="view view--quadrant">
+  <div class="layout">
+
+    {% comment %} Get page data {% endcomment %}
+    {% assign page_data = data[0] %}
+    {% assign page_num = custom_fields.page_number | default: 100 %}
+
+    {% comment %} Title {% endcomment %}
+    <div class="title-bar">
+      <h1 class="title-bar__title text--sm">Text-TV {{ page_num }}</h1>
+    </div>
+
+    {% comment %} Content Area - Minimal display {% endcomment %}
+    {% if page_data.content_plain %}
+      {% comment %} Show only first few lines {% endcomment %}
+      {% assign content_lines = page_data.content_plain | split: "
+" %}
+      {% assign max_lines = 6 %}
+      {% assign truncated_content = "" %}
+      {% for line in content_lines limit: max_lines %}
+        {% assign truncated_content = truncated_content | append: line | append: "
+" %}
+      {% endfor %}
+
+      <div style="font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.5rem; line-height: 1.2; background: #000; color: #ffff00; padding: 0.25rem; border-radius: 2px;">{{ truncated_content }}</div>
+    {% elsif page_data.content %}
+      <div style="font-family: 'Courier New', Courier, monospace; font-size: 0.5rem; line-height: 1.2; background: #000; color: #ffff00; padding: 0.25rem; border-radius: 2px;">
+        {{ page_data.content | strip_html | truncate: 150 }}
+      </div>
+    {% else %}
+      <div class="text--sm text--gray-3">
+        Sida ej tillgänglig
+      </div>
+    {% endif %}
+
+  </div>
+</div>

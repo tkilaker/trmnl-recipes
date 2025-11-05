@@ -1,0 +1,44 @@
+watch:
+  - src/**/*.liquid
+  - src/settings.yml
+
+custom_fields:
+  news_count: 8
+  right_column: sport
+
+time_zone: Europe/Stockholm
+
+variables:
+  data:
+    - channel:
+        item:
+          - title: "Nya regler för elbilar träder i kraft"
+            pubDate: "2025-11-05T08:30:00+01:00"
+          - title: "Kommunen investerar i ny skola"
+            pubDate: "2025-11-05T08:15:00+01:00"
+          - title: "Stormen orsakade strömavbrott"
+            pubDate: "2025-11-05T07:45:00+01:00"
+          - title: "Malmö FF vinner viktig match"
+            pubDate: "2025-11-05T07:30:00+01:00"
+          - title: "Priser på bensin fortsätter stiga"
+            pubDate: "2025-11-05T07:00:00+01:00"
+          - title: "Ny restaurang öppnar på Möllevången"
+            pubDate: "2025-11-05T06:45:00+01:00"
+          - title: "Trafikkaos efter olycka på E22"
+            pubDate: "2025-11-05T06:30:00+01:00"
+          - title: "Kulturhuset presenterar höstprogram"
+            pubDate: "2025-11-05T06:15:00+01:00"
+    - channel:
+        item:
+          - title: "Malmö FF klart för semifinal"
+            pubDate: "2025-11-05T09:00:00+01:00"
+          - title: "Svensk seger i skidskytte"
+            pubDate: "2025-11-05T08:45:00+01:00"
+          - title: "Handbollslaget förlorade borta"
+            pubDate: "2025-11-05T08:30:00+01:00"
+          - title: "Ny tränare för IFK Malmö"
+            pubDate: "2025-11-05T08:00:00+01:00"
+          - title: "Rekordpublik på ishockeymatchen"
+            pubDate: "2025-11-05T07:45:00+01:00"
+          - title: "Fotbollsspelaren skadad i träning"
+            pubDate: "2025-11-05T07:30:00+01:00"

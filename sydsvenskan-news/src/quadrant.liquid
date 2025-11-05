@@ -1,0 +1,37 @@
+{% comment %}
+Sydsvenskan News - Quadrant Layout
+Minimal quarter-screen display
+{% endcomment %}
+
+<div class="view view--quadrant">
+  <div class="layout">
+
+    {% comment %} Title {% endcomment %}
+    <div class="title-bar">
+      <h1 class="title-bar__title text--sm">Sydsvenskan</h1>
+    </div>
+
+    {% comment %} Get configuration - max 4 items for quadrant {% endcomment %}
+    {% assign news_limit = 4 %}
+    {% assign latest_feed = data[0] %}
+
+    {% comment %} News List - Very compact with 1-line truncation {% endcomment %}
+    {% if latest_feed.channel.item %}
+      <div class="list" data-list-limit="true">
+        {% assign items = latest_feed.channel.item | slice: 0, news_limit %}
+        {% for item in items %}
+          <div class="item item--compact">
+            <div class="item__body">
+              <div class="item__title text--sm clamp clamp--1">
+                {{ item.title | strip_html }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text--sm text--gray-3">Inga nyheter</div>
+    {% endif %}
+
+  </div>
+</div>

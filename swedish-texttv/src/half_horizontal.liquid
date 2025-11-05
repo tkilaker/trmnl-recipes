@@ -1,0 +1,43 @@
+{% comment %}
+Swedish Text-TV - Half Horizontal Layout
+Compact Text-TV display for horizontal split
+{% endcomment %}
+
+<div class="view view--half_horizontal">
+  <div class="layout">
+
+    {% comment %} Get page data {% endcomment %}
+    {% assign page_data = data[0] %}
+    {% assign page_num = custom_fields.page_number | default: 100 %}
+
+    {% comment %} Title Bar {% endcomment %}
+    <div class="title-bar">
+      <h1 class="title-bar__title">Text-TV {{ page_num }}</h1>
+      <span class="title-bar__subtitle">{{ "now" | date: "%H:%M" }}</span>
+    </div>
+
+    {% comment %} Content Area - Very compact {% endcomment %}
+    {% if page_data.content_plain %}
+      {% comment %} Truncate content for small horizontal display {% endcomment %}
+      {% assign content_lines = page_data.content_plain | split: "
+" %}
+      {% assign max_lines = 8 %}
+      {% assign truncated_content = "" %}
+      {% for line in content_lines limit: max_lines %}
+        {% assign truncated_content = truncated_content | append: line | append: "
+" %}
+      {% endfor %}
+
+      <div style="font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.65rem; line-height: 1.2; background: #000; color: #ffff00; padding: 0.5rem; border-radius: 4px;">{{ truncated_content }}</div>
+    {% elsif page_data.content %}
+      <div style="font-family: 'Courier New', Courier, monospace; font-size: 0.65rem; line-height: 1.2; background: #000; color: #ffff00; padding: 0.5rem; border-radius: 4px;">
+        {{ page_data.content | strip_html | truncate: 300 }}
+      </div>
+    {% else %}
+      <div class="text--gray-3 text--sm">
+        Kunde inte ladda sida {{ page_num }}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
