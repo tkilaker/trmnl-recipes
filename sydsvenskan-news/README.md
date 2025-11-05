@@ -2,6 +2,8 @@
 
 Display the latest Swedish news from Sydsvenskan newspaper on your TRMNL e-ink display with clean article listings, descriptions, and real-time updates.
 
+**Author:** Tim Kilåker
+
 ## Features
 
 - **Official branding** - Sydsvenskan's iconic knight logo in full layout
@@ -33,11 +35,19 @@ The full-screen layout includes:
 
 ## Installation
 
-### Prerequisites
+This recipe is designed for TRMNL e-ink display users. You can use it in two ways:
 
+### Option 1: Use on TRMNL (Recommended)
+
+If this recipe is published to the TRMNL marketplace, simply add it to your display from the TRMNL dashboard.
+
+### Option 2: Local Development & Custom Deployment
+
+**Prerequisites:**
 - **Ruby 3.x or higher** - [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/)
+- **TRMNL account** - Sign up at [usetrmnl.com](https://usetrmnl.com)
 
-### Steps
+**Steps:**
 
 1. Install the TRMNL local development server:
 ```bash
@@ -55,10 +65,11 @@ trmnlp serve
 ```
    Open http://localhost:4567 in your browser to preview
 
-4. Push to TRMNL:
+4. Deploy to your TRMNL account:
 ```bash
 trmnlp push
 ```
+   This will create/update the plugin in your TRMNL account
 
 ## Local Development
 
@@ -88,10 +99,18 @@ The `.trmnlp.yml` file contains mock data for local testing with sample news art
 - **Styling:** TRMNL Framework CSS classes
 - **Icon:** 512x512px Sydsvenskan official knight logo
 
+## About
+
+This is a custom TRMNL recipe that brings Swedish news from Sydsvenskan directly to your e-ink display. It's designed to provide a clean, newspaper-style reading experience with just the essential information.
+
 ## Contributing
 
-Found a bug or have a suggestion? Please open an issue or submit a pull request!
+Found a bug or have a suggestion? Feel free to open an issue or submit a pull request!
 
 ## License
 
 MIT License - see [LICENSE](../LICENSE) file for details
+
+---
+
+Created by Tim Kilåker | [TRMNL Recipes](https://github.com/timkilaker/trmnl-recipes)

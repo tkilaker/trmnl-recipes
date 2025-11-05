@@ -5,29 +5,12 @@ A collection of TRMNL recipes (plugins) for e-ink displays, focused on Swedish c
 ## Recipes
 
 ### ✅ Sydsvenskan News
-Display Swedish news from Sydsvenskan newspaper in a two-column layout with latest news and sport coverage.
-
-**Features:**
-- Dual-column layout (latest news + sport/business)
-- Configurable item count and column content
-- 30-minute refresh rate
-- All layout sizes supported
-
-**Data source:** Sydsvenskan RSS feeds
+Display the latest Swedish news from Sydsvenskan newspaper with article descriptions, elapsed time indicators, and official branding.
 
 [→ View Recipe Details](./sydsvenskan-news/README.md)
 
 ### ✅ Swedish Text-TV
-Display classic SVT Text-TV (teletext) pages in authentic monospace styling.
-
-**Features:**
-- Display any Text-TV page (100-899)
-- Optional subpage support
-- Authentic teletext styling with monospace font
-- 15-minute refresh rate
-- All layout sizes supported
-
-**Data source:** TextTV.nu API
+Display classic SVT Text-TV (teletext) pages in authentic monospace styling with configurable page numbers and subpage support.
 
 [→ View Recipe Details](./swedish-texttv/README.md)
 
@@ -88,13 +71,11 @@ Each recipe follows this structure:
 ```
 recipe-name/
 ├── README.md              # Recipe documentation
+├── icon.png              # Plugin icon (512x512px)
 ├── .trmnlp.yml           # Local development config
 └── src/
     ├── settings.yml      # Plugin configuration
-    ├── full.liquid       # Full-screen layout
-    ├── half_vertical.liquid    # Half vertical layout
-    ├── half_horizontal.liquid  # Half horizontal layout
-    └── quadrant.liquid   # Quarter-screen layout
+    └── *.liquid          # Layout templates (full, half_vertical, etc.)
 ```
 
 ## Resources
