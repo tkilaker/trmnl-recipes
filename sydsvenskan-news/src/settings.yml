@@ -1,14 +1,12 @@
 ---
-title: Sydsvenskan Latest News
-author: Tim Kilåker
-category: news
-icon: newspaper
-
 strategy: polling
+no_screen_padding: 
+dark_mode: 
+static_data: 
 polling_verb: GET
 polling_url: https://www.sydsvenskan.se/feeds/feed.xml
-
+polling_headers: 
+polling_body: 
+id: 176724
+name: Sydsvenskan Latest News
 refresh_interval: 30
-
-layouts:
-  - full
