@@ -17,18 +17,16 @@ Minimal quarter-screen display
 
     {% comment %} News List - Very compact with 1-line truncation {% endcomment %}
     {% if latest_feed.channel.item %}
-      <div class="list" data-list-limit="true">
-        {% assign items = latest_feed.channel.item | slice: 0, news_limit %}
-        {% for item in items %}
-          <div class="item item--compact">
-            <div class="item__body">
-              <div class="item__title text--sm clamp clamp--1">
-                {{ item.title | strip_html }}
-              </div>
+      {% assign items = latest_feed.channel.item | slice: 0, news_limit %}
+      {% for item in items %}
+        <div class="item">
+          <div class="content">
+            <div class="title text--sm clamp clamp--1">
+              {{ item.title | strip_html }}
             </div>
           </div>
-        {% endfor %}
-      </div>
+        </div>
+      {% endfor %}
     {% else %}
       <div class="text--sm text--gray-3">Inga nyheter</div>
     {% endif %}

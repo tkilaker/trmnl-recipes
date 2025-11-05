@@ -35,21 +35,19 @@ Two-column layout with latest news and sport/business
         <div class="label label--underline">Senaste nytt</div>
 
         {% if latest_feed.channel.item %}
-          <div class="list" data-list-limit="true">
-            {% assign left_items = latest_feed.channel.item | slice: 0, news_limit %}
-            {% for item in left_items %}
-              <div class="item item--compact">
-                <div class="item__body">
-                  <div class="item__title clamp clamp--2">
-                    {{ item.title | strip_html }}
-                  </div>
-                  <div class="description text--sm text--gray-3">
-                    {{ item.pubDate | date: "%H:%M" }}
-                  </div>
+          {% assign left_items = latest_feed.channel.item | slice: 0, news_limit %}
+          {% for item in left_items %}
+            <div class="item">
+              <div class="meta text--sm text--gray-3">
+                {{ item.pubDate | date: "%H:%M" }}
+              </div>
+              <div class="content">
+                <div class="title clamp clamp--2">
+                  {{ item.title | strip_html }}
                 </div>
               </div>
-            {% endfor %}
-          </div>
+            </div>
+          {% endfor %}
         {% else %}
           <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
         {% endif %}
@@ -63,21 +61,19 @@ Two-column layout with latest news and sport/business
         <div class="label label--underline">{{ right_label }}</div>
 
         {% if right_feed.channel.item %}
-          <div class="list" data-list-limit="true">
-            {% assign right_items = right_feed.channel.item | slice: 0, news_limit %}
-            {% for item in right_items %}
-              <div class="item item--compact">
-                <div class="item__body">
-                  <div class="item__title clamp clamp--2">
-                    {{ item.title | strip_html }}
-                  </div>
-                  <div class="description text--sm text--gray-3">
-                    {{ item.pubDate | date: "%H:%M" }}
-                  </div>
+          {% assign right_items = right_feed.channel.item | slice: 0, news_limit %}
+          {% for item in right_items %}
+            <div class="item">
+              <div class="meta text--sm text--gray-3">
+                {{ item.pubDate | date: "%H:%M" }}
+              </div>
+              <div class="content">
+                <div class="title clamp clamp--2">
+                  {{ item.title | strip_html }}
                 </div>
               </div>
-            {% endfor %}
-          </div>
+            </div>
+          {% endfor %}
         {% else %}
           <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
         {% endif %}
