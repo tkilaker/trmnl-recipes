@@ -1,11 +1,13 @@
 # Sydsvenskan News Recipe
 
-Display Swedish news from Sydsvenskan newspaper on your TRMNL e-ink display in a clean, two-column layout.
+Display Swedish news from Sydsvenskan newspaper on your TRMNL e-ink display with NYTimes-style article listings featuring descriptions and elapsed time indicators.
 
 ## Features
 
-- **Dual-column layout** - Latest news on the left, sport or additional latest news on the right
-- **Configurable display** - Choose how many items to show and what appears in the right column
+- **Article descriptions** - Shows the first part of each news story, not just headlines
+- **Elapsed time indicators** - Displays "3h sedan", "5m sedan" instead of timestamps
+- **Automatic numbering** - Clean numbered list with index markers
+- **Configurable display** - Choose how many items to show
 - **Real-time updates** - Fetches from Sydsvenskan RSS feeds every 30 minutes
 - **Swedish time formatting** - Displays timestamps in Europe/Stockholm timezone
 - **All layout sizes** - Supports full, half vertical, half horizontal, and quadrant layouts

@@ -1,81 +1,68 @@
 {% comment %}
 Sydsvenskan News - Full Layout
-Two-column layout with latest news and sport/business
+Single column layout with news stories and descriptions
 {% endcomment %}
 
-<div class="view view--full">
-  <div class="layout">
+{% comment %} View config {% endcomment %}
+{% assign max_height = 420 %}
+{% assign show_elapsed = true %}
+{% assign show_more_label = false %}
 
-    {% comment %} Title Bar {% endcomment %}
-    <div class="title-bar">
-      <h1 class="title-bar__title">Sydsvenskan</h1>
-      <span class="title-bar__subtitle">{{ "now" | date: "%H:%M" }}</span>
-    </div>
+{% comment %} Get configuration {% endcomment %}
+{% assign news_limit = custom_fields.news_count | default: 10 %}
+{% assign latest_feed = data[0] %}
+{% assign now_date = 'now' | date: '%s' %}
 
-    {% comment %} Get configuration {% endcomment %}
-    {% assign news_limit = custom_fields.news_count | default: 10 %}
-    {% assign latest_feed = data[0] %}
-    {% assign sport_feed = data[1] %}
-
-    {% comment %} Determine right column content {% endcomment %}
-    {% assign right_column_type = custom_fields.right_column | default: "sport" %}
-    {% if right_column_type == "sport" %}
-      {% assign right_feed = sport_feed %}
-      {% assign right_label = "Sport" %}
+<div class="layout">
+  <div class="list gap" data-list-limit="true" data-list-max-height="{{ max_height }}" data-list-hidden-count="{{ show_more_label }}">
+    {% if latest_feed.channel.item %}
+      {% for item in latest_feed.channel.item limit: news_limit %}
+        {% liquid
+        if show_elapsed
+          assign pub_date_timestamp = item.pubDate | date: '%s'
+          assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
+          if elapsed > 86400
+            assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
+          elsif elapsed > 3600
+            assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
+          else
+            assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
+          endif
+        endif
+        %}
+        <div class="item gap--small">
+          <div class="meta">
+            <span class="index"></span>
+          </div>
+          <div class="content stretch">
+            <div class="flex gap--xsmall">
+              <span class="title title--small truncate-none">{{ item.title | strip_html }}</span>
+            </div>
+            {% assign desc_content = item.description | default: item.abstract | default: item.summary | default: item.content | default: "" %}
+            {% if desc_content != "" %}
+              <div class="flex gap--xsmall">
+                {% liquid
+                assign description = desc_content | strip_html
+                if show_elapsed
+                  assign description = description | append: " (" | append: elapsed_str | append: " sedan)"
+                endif
+                %}
+                <span class="description clamp--2" style="word-break: break-word">{{ description }}</span>
+              </div>
+            {% elsif show_elapsed %}
+              <div class="flex gap--xsmall">
+                <span class="description text--sm text--gray-3">{{ elapsed_str }} sedan</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
     {% else %}
-      {% assign right_feed = latest_feed %}
-      {% assign right_label = "Senaste nytt" %}
+      <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
     {% endif %}
-
-    {% comment %} Two Column Layout {% endcomment %}
-    <div class="columns">
-
-      {% comment %} Left Column - Latest News {% endcomment %}
-      <div class="column">
-        <div class="label label--underline">Senaste nytt</div>
-
-        {% if latest_feed.channel.item %}
-          {% assign left_items = latest_feed.channel.item | slice: 0, news_limit %}
-          {% for item in left_items %}
-            <div class="item">
-              <p class="clamp clamp--2">
-                {{ item.title | strip_html }}
-              </p>
-              <p class="text--sm text--gray-3">
-                {{ item.pubDate | date: "%H:%M" }}
-              </p>
-            </div>
-          {% endfor %}
-        {% else %}
-          <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
-        {% endif %}
-      </div>
-
-      {% comment %} Vertical Divider {% endcomment %}
-      <div class="divider divider--vertical"></div>
-
-      {% comment %} Right Column - Sport or Latest {% endcomment %}
-      <div class="column">
-        <div class="label label--underline">{{ right_label }}</div>
-
-        {% if right_feed.channel.item %}
-          {% assign right_items = right_feed.channel.item | slice: 0, news_limit %}
-          {% for item in right_items %}
-            <div class="item">
-              <p class="clamp clamp--2">
-                {{ item.title | strip_html }}
-              </p>
-              <p class="text--sm text--gray-3">
-                {{ item.pubDate | date: "%H:%M" }}
-              </p>
-            </div>
-          {% endfor %}
-        {% else %}
-          <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
-        {% endif %}
-      </div>
-
-    </div>
-
   </div>
+</div>
+<div class="title_bar">
+  <span class="title">Sydsvenskan</span>
+  <span class="instance">Senaste nytt</span>
 </div>

@@ -3,40 +3,71 @@ Sydsvenskan News - Half Vertical Layout
 Single column for split-screen vertical display
 {% endcomment %}
 
+{% comment %} View config {% endcomment %}
+{% assign max_height = 420 %}
+{% assign show_elapsed = true %}
+{% assign show_more_label = false %}
+
+{% comment %} Get configuration - max 8 items for vertical half {% endcomment %}
+{% assign news_limit = custom_fields.news_count | default: 8 %}
+{% if news_limit > 8 %}
+  {% assign news_limit = 8 %}
+{% endif %}
+{% assign latest_feed = data[0] %}
+{% assign now_date = 'now' | date: '%s' %}
+
 <div class="view view--half_vertical">
   <div class="layout">
-
-    {% comment %} Title Bar {% endcomment %}
-    <div class="title-bar">
-      <h1 class="title-bar__title">Sydsvenskan</h1>
-      <span class="title-bar__subtitle">{{ "now" | date: "%H:%M" }}</span>
+    <div class="list gap" data-list-limit="true" data-list-max-height="{{ max_height }}" data-list-hidden-count="{{ show_more_label }}">
+      {% if latest_feed.channel.item %}
+        {% assign items = latest_feed.channel.item | slice: 0, news_limit %}
+        {% for item in items %}
+          {% liquid
+          if show_elapsed
+            assign pub_date_timestamp = item.pubDate | date: '%s'
+            assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
+            if elapsed > 86400
+              assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
+            elsif elapsed > 3600
+              assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
+            else
+              assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
+            endif
+          endif
+          %}
+          <div class="item gap--small">
+            <div class="meta">
+              <span class="index"></span>
+            </div>
+            <div class="content stretch">
+              <div class="flex gap--xsmall">
+                <span class="title title--small truncate-none">{{ item.title | strip_html }}</span>
+              </div>
+              {% if item.description %}
+                <div class="flex gap--xsmall">
+                  {% liquid
+                  assign description = item.description | strip_html
+                  if show_elapsed
+                    assign description = description | append: " (" | append: elapsed_str | append: " sedan)"
+                  endif
+                  %}
+                  <span class="description clamp--2" style="word-break: break-word">{{ description }}</span>
+                </div>
+              {% elsif show_elapsed %}
+                <div class="flex gap--xsmall">
+                  <span class="description text--sm text--gray-3">{{ elapsed_str }} sedan</span>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
+      {% endif %}
     </div>
-
-    {% comment %} Get configuration - max 8 items for vertical half {% endcomment %}
-    {% assign news_limit = custom_fields.news_count | default: 8 %}
-    {% if news_limit > 8 %}
-      {% assign news_limit = 8 %}
-    {% endif %}
-    {% assign latest_feed = data[0] %}
-
-    {% comment %} News List {% endcomment %}
-    <div class="label label--underline">Senaste nytt</div>
-
-    {% if latest_feed.channel.item %}
-      {% assign items = latest_feed.channel.item | slice: 0, news_limit %}
-      {% for item in items %}
-        <div class="item">
-          <p class="clamp clamp--2">
-            {{ item.title | strip_html }}
-          </p>
-          <p class="text--sm text--gray-3">
-            {{ item.pubDate | date: "%H:%M" }}
-          </p>
-        </div>
-      {% endfor %}
-    {% else %}
-      <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
-    {% endif %}
-
+  </div>
+  <div class="title_bar">
+    <span class="title">Sydsvenskan</span>
+    <span class="instance">Senaste nytt</span>
   </div>
 </div>
