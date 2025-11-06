@@ -2,6 +2,8 @@
 
 Display classic SVT Text-TV (teletext) pages on your TRMNL e-ink display with authentic monospace styling.
 
+**Author:** Tim Kilåker
+
 ## Features
 
 - **Authentic Text-TV styling** - Monospace font with classic yellow-on-black color scheme
@@ -9,7 +11,7 @@ Display classic SVT Text-TV (teletext) pages on your TRMNL e-ink display with au
 - **Subpage support** - Optional display of subpages when available
 - **Real-time updates** - Fetches from TextTV.nu API every 15 minutes
 - **Swedish time formatting** - Displays in Europe/Stockholm timezone
-- **All layout sizes** - Supports full, half vertical, half horizontal, and quadrant layouts
+- **Multiple layouts** - Supports full, half vertical, half horizontal, and quadrant layouts
 - **E-ink optimized** - High contrast display perfect for e-ink screens
 
 ## Configuration Options
@@ -115,17 +117,24 @@ Refresh rate: Every 15 minutes
 
 ## Installation
 
-### Prerequisites
+This recipe is designed for TRMNL e-ink display users. You can use it in two ways:
 
+### Option 1: Use on TRMNL (Recommended)
+
+If this recipe is published to the TRMNL marketplace, simply add it to your display from the TRMNL dashboard.
+
+### Option 2: Local Development & Custom Deployment
+
+**Prerequisites:**
 - **Ruby 3.x or higher** - [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/)
+- **TRMNL account** - Sign up at [usetrmnl.com](https://usetrmnl.com)
 
-### Steps
+**Steps:**
 
 1. Install the TRMNL local development server:
 ```bash
 gem install trmnl_preview
 ```
-   (This installs the `trmnlp` command)
 
 2. Navigate to this recipe directory:
 ```bash
@@ -136,15 +145,17 @@ cd swedish-texttv
 ```bash
 trmnlp serve
 ```
+   Open http://localhost:4567 in your browser to preview
 
-4. Push to TRMNL:
+4. Deploy to your TRMNL account:
 ```bash
 trmnlp push
 ```
+   This will create/update the plugin in your TRMNL account
 
 ## Local Development
 
-The `.trmnlp.yml` file contains mock data for local testing. You can modify the `custom_fields` section to test different page numbers:
+The `.trmnlp.yml` file contains mock data for local testing with a sample Text-TV page. You can modify the `custom_fields` section to test different page numbers:
 
 ```yaml
 custom_fields:
@@ -203,6 +214,11 @@ The recipe uses `content_plain` for authentic monospace display.
 - **Refresh:** 15 minutes
 - **Template Engine:** Liquid
 - **Styling:** Inline CSS for monospace and colors
+- **Icon:** Television icon
+
+## About
+
+This is a custom TRMNL recipe that brings classic Swedish Text-TV (teletext) directly to your e-ink display. It's designed to provide an authentic Text-TV viewing experience with the iconic yellow-on-black monospace styling that millions of Swedes grew up with.
 
 ## Popular Pages
 
@@ -218,7 +234,7 @@ The recipe uses `content_plain` for authentic monospace display.
 
 ## Contributing
 
-Found a bug or have a suggestion? Please open an issue or submit a pull request!
+Found a bug or have a suggestion? Feel free to open an issue or submit a pull request!
 
 ## License
 
@@ -227,3 +243,7 @@ MIT License - see [LICENSE](../LICENSE) file for details
 ## Credits
 
 This recipe uses the excellent [TextTV.nu](https://texttv.nu) API for accessing SVT Text-TV content.
+
+---
+
+Created by Tim Kilåker | [TRMNL Recipes](https://github.com/tkilaker/trmnl-recipes)

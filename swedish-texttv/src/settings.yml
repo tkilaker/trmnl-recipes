@@ -9,6 +9,14 @@ polling:
   - https://api.texttv.nu/api/get/100?app=trmnl-texttv&includePlainTextContent=1
 
 custom_fields:
+  - keyname: author_bio
+    name: About This Plugin
+    field_type: author_bio
+    description: Swedish Text-TV was created by Tim.
+    github_url: https://github.com/tkilaker/trmnl-recipes
+    email_address: tkilaker@icloud.com
+
+
   - keyname: page_number
     name: Text-TV Page Number
     field_type: integer
