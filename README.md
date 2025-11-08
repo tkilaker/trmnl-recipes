@@ -17,12 +17,12 @@ Most recipes in this collection focus on Swedish content sources, but the struct
 ### ✅ DN News
 Display the latest Swedish news from Dagens Nyheter (DN) with article descriptions, elapsed time indicators, and official branding.
 
-[→ View Recipe Details](./dn-news/README.md)
+**📦 Published Recipe** - [Install from TRMNL](https://usetrmnl.com/recipes/176747/install) | [View Recipe Details](./dn-news/README.md)
 
 ### ✅ Sydsvenskan News
 Display the latest Swedish news from Sydsvenskan newspaper with article descriptions, elapsed time indicators, and official branding.
 
-[→ View Recipe Details](./sydsvenskan-news/README.md)
+**📦 Published Recipe** - [Install from TRMNL](https://usetrmnl.com/recipes/176724/install) | [View Recipe Details](./sydsvenskan-news/README.md)
 
 ### ✅ Swedish Text-TV
 Display classic SVT Text-TV (teletext) pages in authentic monospace styling with configurable page numbers and subpage support.
@@ -31,7 +31,16 @@ Display classic SVT Text-TV (teletext) pages in authentic monospace styling with
 
 ## How to Use
 
-Each recipe has its own README with detailed information about features, configuration options, and installation instructions. Browse the recipes above and follow the individual recipe documentation for specific setup steps.
+### Quick Install (Published Recipes)
+
+Some recipes are published on TRMNL and can be installed with one click:
+- **DN News** and **Sydsvenskan News** are available as published recipes
+- Click the "Install from TRMNL" link above to add them directly to your display
+- You can fork these recipes to customize them for your needs
+
+### Local Development & Custom Recipes
+
+Each recipe has its own README with detailed information about features, configuration options, and installation instructions. Browse the recipes above and follow the individual recipe documentation for local development and customization.
 
 ## Getting Started
 
