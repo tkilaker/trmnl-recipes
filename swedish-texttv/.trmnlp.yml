@@ -3,37 +3,38 @@ watch:
   - src/settings.yml
 
 custom_fields:
-  page_number: 100
+  page_number: 200
   show_subpages: false
 
 time_zone: Europe/Stockholm
 
 variables:
   data:
-    - num: 100
-      title: "Innehåll"
+    - num: "101"
+      title: "SVT Text"
       content: "<div>SVT Text-TV page content here</div>"
       content_plain: |
-        100                SVT Text-TV             2025-11-05 08:30
+        101 SVT Text torsdag 06 nov 2025
 
 
-                              INNEHÅLL
+                                     SVT Text
 
+           * = efter kl 12
 
-        101   Sport och idrott
-        200   Inrikes nyheter
-        300   Utrikes nyheter
-        400   Kultur och nöje
-        500   Ekonomi
-        600   Väder
-        700   Sport resultat
+          Man skjuten till döds i Bromma.... 106
 
+          Oväntat hög inflation i oktober... 107
 
-        Senaste nyheterna:
+        * Hälften av Stegra-kapitalet säkrat 108
 
-        • Nya regler för elbilar träder i kraft idag
-        • Stormen orsakade omfattande strömavbrott
-        • Regeringen presenterar ny klimatplan
+          Regeringen: Anmäl kontantutförsel. 109
 
+          Brå: Var fjärde politiker hotas... 110
 
-        [Navigera: 101-899]
+          Misstänks ha förberett terrordåd.. 111
+
+          Man döms för mord på flickvän..... 112
+
+        * Misstänkt fusk med p-vakter....... 113
+
+           Utrikes 104  Sport 300  Innehåll 700

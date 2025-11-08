@@ -3,37 +3,24 @@ Swedish Text-TV - Full Layout
 Display classic SVT Text-TV pages with monospace styling
 {% endcomment %}
 
-<div class="view view--full">
-  <div class="layout">
+<div class="view view--full" style="background: #000; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+  <div class="layout" style="background: #000; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; width: 100%;">
 
     {% comment %} Get page data {% endcomment %}
     {% assign page_data = data[0] %}
-    {% assign page_num = custom_fields.page_number | default: 100 %}
+    {% assign page_num = custom_fields.page_number | default: 200 %}
 
-    {% comment %} Title Bar with Page Number {% endcomment %}
-    <div class="title-bar">
-      <h1 class="title-bar__title">Text-TV {{ page_num }}</h1>
-      <span class="title-bar__subtitle">{{ "now" | date: "%H:%M" }}</span>
-    </div>
-
-    {% comment %} Content Area with Monospace Styling {% endcomment %}
+    {% comment %} Content Area with Monospace Styling - Centered {% endcomment %}
     {% if page_data.content_plain %}
-      <div style="font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.4; background: #000; color: #ffff00; padding: 1rem; border-radius: 4px;">{{ page_data.content_plain }}</div>
+      <div style="font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.4; background: #000; color: #ffff00; padding: 1rem; text-align: center;">{{ page_data.content_plain }}</div>
     {% elsif page_data.content %}
-      <div style="font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.4; background: #000; color: #ffff00; padding: 1rem; border-radius: 4px;">
+      <div style="font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.4; background: #000; color: #ffff00; padding: 1rem; text-align: center;">
         {{ page_data.content | strip_html }}
       </div>
     {% else %}
-      <div class="text--gray-3">
+      <div style="background: #000; color: #ffff00; padding: 1rem; font-family: 'Courier New', Courier, monospace; text-align: center;">
         <p>Text-TV-sidan kunde inte laddas.</p>
-        <p class="text--sm">Kontrollera sidnummer ({{ page_num }}) och försök igen.</p>
-      </div>
-    {% endif %}
-
-    {% comment %} Page Title if available {% endcomment %}
-    {% if page_data.title %}
-      <div class="text--sm text--gray-3" style="margin-top: 0.5rem;">
-        Sida: {{ page_data.title }}
+        <p style="font-size: 0.85rem;">Kontrollera sidnummer ({{ page_num }}) och försök igen.</p>
       </div>
     {% endif %}
 
