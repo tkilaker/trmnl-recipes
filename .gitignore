@@ -2,6 +2,7 @@
 *.png
 .trmnlp/
 screenshots/
+_local/
 
 # Editor files
 .DS_Store
