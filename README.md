@@ -1,8 +1,23 @@
 # TRMNL Recipes
 
-A collection of TRMNL recipes (plugins) for e-ink displays, focused on Swedish content sources.
+A collection of custom TRMNL recipes (plugins) for e-ink displays. These recipes extend your TRMNL display with additional content sources, layouts, and functionality.
 
-## Recipes
+## What is This Repository?
+
+This repository contains ready-to-use TRMNL recipes that you can deploy to your own TRMNL display. Each recipe is a self-contained plugin that:
+- Fetches data from external sources (RSS feeds, APIs, etc.)
+- Formats content using Liquid templates
+- Renders optimized layouts for e-ink displays
+- Updates automatically based on configurable refresh intervals
+
+Most recipes in this collection focus on Swedish content sources, but the structure and patterns can be adapted for other regions and use cases.
+
+## Available Recipes
+
+### ✅ DN News
+Display the latest Swedish news from Dagens Nyheter (DN) with article descriptions, elapsed time indicators, and official branding.
+
+[→ View Recipe Details](./dn-news/README.md)
 
 ### ✅ Sydsvenskan News
 Display the latest Swedish news from Sydsvenskan newspaper with article descriptions, elapsed time indicators, and official branding.
@@ -13,6 +28,10 @@ Display the latest Swedish news from Sydsvenskan newspaper with article descript
 Display classic SVT Text-TV (teletext) pages in authentic monospace styling with configurable page numbers and subpage support.
 
 [→ View Recipe Details](./swedish-texttv/README.md)
+
+## How to Use
+
+Each recipe has its own README with detailed information about features, configuration options, and installation instructions. Browse the recipes above and follow the individual recipe documentation for specific setup steps.
 
 ## Getting Started
 
