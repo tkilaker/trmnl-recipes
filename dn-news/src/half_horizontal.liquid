@@ -1,14 +1,6 @@
-{% comment %}
-DN News - Half Horizontal Layout
-Compact news display for horizontal split
-{% endcomment %}
-
-{% comment %} View config {% endcomment %}
 {% assign max_height = 180 %}
 {% assign show_elapsed = true %}
 {% assign show_more_label = false %}
-
-{% comment %} Get configuration {% endcomment %}
 {% assign news_limit = 4 %}
 {% assign latest_feed = rss %}
 {% assign now_date = 'now' | date: '%s' %}
@@ -42,7 +34,7 @@ Compact news display for horizontal split
                 assign title_text = title_text | append: " (" | append: elapsed_str | append: ")"
               endif
               %}
-              <span class="title title--xsmall truncate-none">{{ title_text }}</span>
+              <span class="title title--xsmall truncate-none">{{ title_text | truncate: 90 }}</span>
             </div>
           </div>
         </div>

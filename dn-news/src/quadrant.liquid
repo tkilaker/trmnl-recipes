@@ -1,14 +1,6 @@
-{% comment %}
-DN News - Quadrant Layout
-Minimal news display for quarter screen
-{% endcomment %}
-
-{% comment %} View config {% endcomment %}
 {% assign max_height = 160 %}
 {% assign show_elapsed = false %}
 {% assign show_more_label = false %}
-
-{% comment %} Get configuration {% endcomment %}
 {% assign news_limit = 3 %}
 {% assign latest_feed = rss %}
 
@@ -21,7 +13,7 @@ Minimal news display for quarter screen
             <span class="index"></span>
           </div>
           <div class="content stretch">
-            <span class="title title--xsmall truncate-none">{{ item.title | strip_html }}</span>
+            <span class="title title--xsmall truncate-none">{{ item.title | strip_html | truncate: 80 }}</span>
           </div>
         </div>
       {% endfor %}
