@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# poll-real <recipe>
+# Fetches the recipe's polling_url, parses RSS/XML or JSON the same way TRMNL
+# does server-side, runs src/transform.js if present, and writes the result
+# into trmnlp's cache so `trmnlp serve` displays real data instead of the
+# .trmnlp.yml mock.
+#
+# Requires: curl, python3, node (all preinstalled on macOS / via rbenv).
+set -euo pipefail
+
+if [ $# -lt 1 ]; then
+  echo "usage: bin/poll-real <recipe>" >&2
+  exit 64
+fi
+
+RECIPE="$1"
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+RECIPE_DIR="$REPO_ROOT/$RECIPE"
+SETTINGS="$RECIPE_DIR/src/settings.yml"
+TRANSFORM="$RECIPE_DIR/src/transform.js"
+
+[ -d "$RECIPE_DIR" ] || { echo "no such recipe: $RECIPE_DIR" >&2; exit 1; }
+[ -f "$SETTINGS"   ] || { echo "missing $SETTINGS"        >&2; exit 1; }
+
+URL=$(awk '/^polling_url:/ { sub(/^polling_url: */, ""); print; exit }' "$SETTINGS")
+VERB=$(awk '/^polling_verb:/ { sub(/^polling_verb: */, ""); print toupper($0); exit }' "$SETTINGS")
+VERB="${VERB:-GET}"
+[ -n "$URL" ] || { echo "no polling_url found in $SETTINGS" >&2; exit 1; }
+
+TMPDIR=$(mktemp -d)
+trap 'rm -rf "$TMPDIR"' EXIT
+
+echo "$VERB $URL"
+curl -sSL -X "$VERB" -o "$TMPDIR/raw" -D "$TMPDIR/headers" "$URL"
+
+RAW_BYTES=$(wc -c < "$TMPDIR/raw" | tr -d ' ')
+CTYPE=$(grep -i '^content-type:' "$TMPDIR/headers" | head -1 | tr -d '\r' | sed 's/^[Cc]ontent-[Tt]ype: *//')
+echo "content-type: ${CTYPE:-<unknown>}"
+echo "raw bytes:    $RAW_BYTES"
+
+# Parse to the same shape TRMNL's server hands to transform(input).
+# - JSON:    pass through.
+# - RSS/XML: parse to { channel: {...} } mirroring `rss.channel.item[]`.
+case "$CTYPE" in
+  *xml*|*rss*)
+    python3 - "$TMPDIR/raw" > "$TMPDIR/parsed.json" <<'PY'
+import sys, json, xml.etree.ElementTree as ET
+
+def el_to_obj(el):
+    children = list(el)
+    if not children:
+        return (el.text or '').strip()
+    obj = {}
+    for c in children:
+        tag = c.tag.split('}', 1)[-1]
+        val = el_to_obj(c)
+        if tag in obj:
+            if not isinstance(obj[tag], list):
+                obj[tag] = [obj[tag]]
+            obj[tag].append(val)
+        else:
+            obj[tag] = val
+    return obj
+
+root = ET.parse(sys.argv[1]).getroot()
+channel = root.find('channel') if root.tag.endswith('rss') else root
+print(json.dumps({'channel': el_to_obj(channel)}, ensure_ascii=False))
+PY
+    ;;
+  *json*|"")
+    cp "$TMPDIR/raw" "$TMPDIR/parsed.json"
+    ;;
+  *)
+    echo "unsupported content-type: $CTYPE" >&2
+    exit 2
+    ;;
+esac
+
+# Run transform.js if the recipe ships one. Loaded via require() of a temp
+# CommonJS module — the recipe file is treated as plain code, not eval'd.
+if [ -f "$TRANSFORM" ]; then
+  node - "$TMPDIR/parsed.json" "$TRANSFORM" "$TMPDIR/out.json" <<'JS'
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+const [, , parsedPath, transformPath, outPath] = process.argv;
+const input = JSON.parse(fs.readFileSync(parsedPath, 'utf8'));
+const src = fs.readFileSync(transformPath, 'utf8');
+
+const tmp = path.join(os.tmpdir(), `trmnl-transform-${process.pid}.js`);
+fs.writeFileSync(tmp, src + '\nmodule.exports = { transform };\n');
+try {
+  const { transform } = require(tmp);
+  fs.writeFileSync(outPath, JSON.stringify(transform(input)));
+} finally {
+  fs.unlinkSync(tmp);
+}
+JS
+else
+  cp "$TMPDIR/parsed.json" "$TMPDIR/out.json"
+fi
+
+OUT_BYTES=$(wc -c < "$TMPDIR/out.json" | tr -d ' ')
+echo "out bytes:    $OUT_BYTES"
+
+if [ "$OUT_BYTES" -ge 102400 ]; then
+  echo "WARN: output >= 100 KB — TRMNL would reject this payload" >&2
+fi
+
+# trmnl_preview reads its cache from XDG cache dir.
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/trmnl"
+mkdir -p "$CACHE_DIR"
+cp "$TMPDIR/out.json" "$CACHE_DIR/data.json"
+echo "cached: $CACHE_DIR/data.json"
