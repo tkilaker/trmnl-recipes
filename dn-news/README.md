@@ -25,6 +25,12 @@ This recipe fetches data from DN's main RSS feed:
 
 Refresh rate: Every 30 minutes
 
+## Transform (required)
+
+DN's RSS feed exceeds TRMNL's 100 KB polling payload limit (currently ~125 KB). The recipe ships a Node v22 sandbox script at `src/transform.js` that trims the feed to the first 10 items and truncates each description to 280 characters, producing a flat `items[]` for the templates.
+
+`trmnlp push` syncs `src/transform.js` along with the templates (in the TRMNL UI the tab is now called **Serverless**). After push, hit **Force Refresh** on the plugin settings to re-pull and re-render.
+
 ## Layout
 
 The full-screen layout includes:

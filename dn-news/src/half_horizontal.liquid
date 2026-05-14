@@ -1,22 +1,18 @@
 {% comment %}
 DN News - Half Horizontal Layout
-Compact news display for horizontal split
+Iterates `items` produced by src/transform.js (post-payload-trim).
 {% endcomment %}
 
-{% comment %} View config {% endcomment %}
 {% assign max_height = 180 %}
 {% assign show_elapsed = true %}
 {% assign show_more_label = false %}
-
-{% comment %} Get configuration {% endcomment %}
 {% assign news_limit = 4 %}
-{% assign latest_feed = rss %}
 {% assign now_date = 'now' | date: '%s' %}
 
 <div class="layout">
   <div class="list gap--small" data-list-limit="true" data-list-max-height="{{ max_height }}" data-list-hidden-count="{{ show_more_label }}">
-    {% if latest_feed.channel.item %}
-      {% for item in latest_feed.channel.item limit: news_limit %}
+    {% if items.size > 0 %}
+      {% for item in items limit: news_limit %}
         {% liquid
         if show_elapsed
           assign pub_date_timestamp = item.pubDate | date: '%s'
@@ -42,7 +38,7 @@ Compact news display for horizontal split
                 assign title_text = title_text | append: " (" | append: elapsed_str | append: ")"
               endif
               %}
-              <span class="title title--xsmall truncate-none">{{ title_text }}</span>
+              <span class="title title--xsmall clamp--1">{{ title_text }}</span>
             </div>
           </div>
         </div>
