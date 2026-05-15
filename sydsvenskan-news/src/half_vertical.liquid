@@ -1,22 +1,18 @@
 {% comment %}
 Sydsvenskan News - Half Vertical Layout
-Compact news display for vertical split
+Iterates `items` produced by src/transform.js (post-payload-trim).
 {% endcomment %}
 
-{% comment %} View config {% endcomment %}
 {% assign max_height = 380 %}
 {% assign show_elapsed = true %}
 {% assign show_more_label = false %}
-
-{% comment %} Get configuration {% endcomment %}
 {% assign news_limit = 6 %}
-{% assign latest_feed = rss %}
 {% assign now_date = 'now' | date: '%s' %}
 
 <div class="layout">
   <div class="list gap--small" data-list-limit="true" data-list-max-height="{{ max_height }}" data-list-hidden-count="{{ show_more_label }}">
-    {% if latest_feed.channel.item %}
-      {% for item in latest_feed.channel.item limit: news_limit %}
+    {% if items.size > 0 %}
+      {% for item in items limit: news_limit %}
         {% liquid
         if show_elapsed
           assign pub_date_timestamp = item.pubDate | date: '%s'
@@ -44,10 +40,9 @@ Compact news display for vertical split
               %}
               <span class="title title--small clamp--1">{{ title_text }}</span>
             </div>
-            {% assign desc_content = item.description | default: item.abstract | default: item.summary | default: "" %}
-            {% if desc_content != "" %}
+            {% if item.description != "" %}
               <div class="flex gap--xsmall">
-                <span class="description text--xs clamp--1" style="word-break: break-word">{{ desc_content | strip_html }}</span>
+                <span class="description text--xs clamp--1" style="word-break: break-word">{{ item.description | strip_html }}</span>
               </div>
             {% endif %}
           </div>

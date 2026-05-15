@@ -1,37 +1,19 @@
 watch:
   - src/**/*.liquid
   - src/settings.yml
+  - src/transform.js
 
 custom_fields:
   news_count: 8
 
 time_zone: Europe/Stockholm
 
-variables:
-  rss:
-    channel:
-      item:
-        - title: "Nya regler för elbilar träder i kraft"
-          description: "Regeringen inför nya stödregler för elbilar från och med 1 januari. De nya reglerna förväntas öka försäljningen med 25 procent nästa år."
-          pubDate: "2025-11-05T08:30:00+01:00"
-        - title: "Kommunen investerar i ny skola"
-          description: "Malmö stad satsar 450 miljoner kronor på att bygga en ny grundskola i Rosengård. Bygget startar nästa höst och skolan beräknas stå klar 2028."
-          pubDate: "2025-11-05T08:15:00+01:00"
-        - title: "Stormen orsakade strömavbrott"
-          description: "Över 5000 hushåll i Skåne drabbades av strömavbrott när stormen drog in över länet under natten. E.ON arbetar med att återställa elen."
-          pubDate: "2025-11-05T07:45:00+01:00"
-        - title: "Malmö FF vinner viktig match"
-          description: "MFF besegrade Göteborg med 2-1 i en dramatisk match på Stadion. Segern innebär att laget klättrar till andra plats i tabellen."
-          pubDate: "2025-11-05T07:30:00+01:00"
-        - title: "Priser på bensin fortsätter stiga"
-          description: "Bensinpriset har stigit med 45 öre per liter den senaste veckan. Preem och Circle K höjer nu priserna ytterligare från midnatt."
-          pubDate: "2025-11-05T07:00:00+01:00"
-        - title: "Ny restaurang öppnar på Möllevången"
-          description: "En ny vegetarisk restaurang med fokus på nordisk matkultur öppnar på Möllevången i slutet av månaden. Menyn bygger på ekologiska och lokala råvaror."
-          pubDate: "2025-11-05T06:45:00+01:00"
-        - title: "Trafikkaos efter olycka på E22"
-          description: "En trafikolycka med tre inblandade bilar orsakade långa köer på E22 under morgontrafiken. Vägen har nu öppnats igen men restider är fortfarande längre än normalt."
-          pubDate: "2025-11-05T06:30:00+01:00"
-        - title: "Kulturhuset presenterar höstprogram"
-          description: "Malmö kulturhus presenterar ett innehållsrikt höstprogram med konst, musik och teater. Bland höjdpunkterna finns utställningen om svensk design genom tiderna."
-          pubDate: "2025-11-05T06:15:00+01:00"
+# By default trmnlp serve uses the cache populated by `bin/poll-real sydsvenskan-news`.
+# To preview offline (no network), uncomment the block below — `variables`
+# deep-merges on top of the cache and wins for any keys it sets.
+#
+# variables:
+#   items:
+#     - title: "Exempel: en nyhet"
+#       description: "Beskrivning i två rader."
+#       pubDate: "Thu, 15 May 2026 21:50:00 +0200"
