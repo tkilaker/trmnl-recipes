@@ -5,7 +5,7 @@ dark_mode:
 static_data: 
 polling_verb: GET
 framework_version: 2.3.7
-serverless_language: 
+serverless_language: node
 polling_url: https://www.dn.se/rss/
 polling_headers: 
 polling_body: 

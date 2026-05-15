@@ -4,6 +4,8 @@ no_screen_padding:
 dark_mode: 
 static_data: 
 polling_verb: GET
+framework_version: 2.3.7
+serverless_language: node
 polling_url: https://www.sydsvenskan.se/feeds/feed.xml
 polling_headers: 
 polling_body: 
