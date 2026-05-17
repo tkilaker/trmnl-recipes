@@ -22,3 +22,6 @@ vendor/bundle/
 
 # OS files
 Thumbs.db
+
+# Playwright MCP scratch
+.playwright-mcp/
