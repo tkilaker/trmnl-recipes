@@ -1,28 +1,54 @@
 {% comment %}
 Swedish Text-TV - Full Layout
-Display classic SVT Text-TV pages with monospace styling
+X-first full-canvas teletext. The OG retains a compact readable scale.
 {% endcomment %}
 
-<div class="view view--full" style="background: #000; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
-  <div class="layout" style="background: #000; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; width: 100%;">
+{% assign page_data = data[0] %}
+{% assign page_num = custom_fields.page_number | default: 200 %}
 
-    {% comment %} Get page data {% endcomment %}
-    {% assign page_data = data[0] %}
-    {% assign page_num = custom_fields.page_number | default: 200 %}
+<style>
+  .texttv-x {
+    align-items: center;
+    background: #000;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 1rem;
+  }
+  .texttv-x__page {
+    color: #ffff00;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: clamp(.9rem, 3.3vh, 3rem);
+    font-weight: 700;
+    line-height: 1.12;
+    margin: 0;
+    max-width: none;
+    transform: scaleX(1.32);
+    transform-origin: center;
+    white-space: pre;
+  }
+  .texttv-x__error {
+    color: #ffff00;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  @media (min-width: 1200px) {
+    .texttv-x { padding: 2.5rem; }
+  }
+</style>
 
-    {% comment %} Content Area with Monospace Styling - Centered {% endcomment %}
-    {% if page_data.content_plain %}
-      <div style="font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.4; background: #000; color: #ffff00; padding: 1rem; text-align: center;">{{ page_data.content_plain }}</div>
-    {% elsif page_data.content %}
-      <div style="font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.4; background: #000; color: #ffff00; padding: 1rem; text-align: center;">
-        {{ page_data.content | strip_html }}
-      </div>
-    {% else %}
-      <div style="background: #000; color: #ffff00; padding: 1rem; font-family: 'Courier New', Courier, monospace; text-align: center;">
-        <p>Text-TV-sidan kunde inte laddas.</p>
-        <p style="font-size: 0.85rem;">Kontrollera sidnummer ({{ page_num }}) och försök igen.</p>
-      </div>
-    {% endif %}
-
-  </div>
+<div class="view view--full texttv-x">
+  {% if page_data.content_plain %}
+    <pre class="texttv-x__page">{{ page_data.content_plain }}</pre>
+  {% elsif page_data.content %}
+    <pre class="texttv-x__page">{{ page_data.content | strip_html }}</pre>
+  {% else %}
+    <div class="texttv-x__error">
+      <div>Text-TV-sidan kunde inte laddas.</div>
+      <div>Sida {{ page_num }}</div>
+    </div>
+  {% endif %}
 </div>

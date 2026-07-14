@@ -1,61 +1,104 @@
 {% comment %}
 DN News - Full Layout
-Iterates `items` produced by src/transform.js (post-payload-trim).
+X-first editorial layout. Falls back to a compact single column on the OG.
 {% endcomment %}
 
-{% assign max_height = 420 %}
-{% assign show_elapsed = true %}
-{% assign show_more_label = false %}
-{% assign news_limit = 10 %}
 {% assign now_date = 'now' | date: '%s' %}
 
-<div class="layout">
-  <div class="list gap" data-list-limit="true" data-list-max-height="{{ max_height }}" data-list-hidden-count="{{ show_more_label }}">
-    {% if items.size > 0 %}
-      {% for item in items limit: news_limit %}
-        {% liquid
-        if show_elapsed
-          assign pub_date_timestamp = item.pubDate | date: '%s'
-          assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
-          if elapsed > 86400
-            assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
-          elsif elapsed > 3600
-            assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
-          else
-            assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
-          endif
-        endif
-        %}
-        <div class="item gap--small">
-          <div class="meta">
-            <span class="index"></span>
-          </div>
-          <div class="content stretch">
-            <div class="flex gap--xsmall">
-              {% liquid
-              assign title_text = item.title | strip_html
-              if show_elapsed
-                assign title_text = title_text | append: " (" | append: elapsed_str | append: " sedan)"
-              endif
-              %}
-              <span class="title title--small clamp--1">{{ title_text }}</span>
-            </div>
-            {% if item.description != "" %}
-              <div class="flex gap--xsmall">
-                <span class="description clamp--2" style="word-break: break-word">{{ item.description | strip_html }}</span>
-              </div>
-            {% endif %}
-          </div>
-        </div>
+<style>
+  .news-x {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    min-height: calc(100vh - 4rem);
+  }
+  .news-x__lead {
+    border-right: 2px solid #000;
+    padding-right: 1.25rem;
+  }
+  .news-x__kicker, .news-x__time {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .news-x__lead-title {
+    display: block;
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.08;
+    margin: .45rem 0 .75rem;
+  }
+  .news-x__lead-description {
+    font-size: .95rem;
+    line-height: 1.35;
+  }
+  .news-x__list {
+    display: grid;
+    align-content: start;
+    gap: .6rem;
+  }
+  .news-x__item {
+    border-bottom: 1px solid #000;
+    display: grid;
+    gap: .15rem;
+    padding-bottom: .55rem;
+  }
+  .news-x__item-title {
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .news-x__item-description {
+    font-size: .75rem;
+    line-height: 1.25;
+  }
+  @media (min-width: 1200px) {
+    .news-x { gap: 3rem; min-height: calc(100vh - 7rem); }
+    .news-x__lead { border-width: 4px; padding-right: 3rem; }
+    .news-x__kicker, .news-x__time { font-size: 1.25rem; }
+    .news-x__lead-title { font-size: 4.5rem; margin: 1rem 0 1.5rem; }
+    .news-x__lead-description { font-size: 2rem; line-height: 1.3; }
+    .news-x__list { gap: 1.25rem; }
+    .news-x__item { gap: .5rem; padding-bottom: 1.1rem; }
+    .news-x__item-title { font-size: 1.85rem; line-height: 1.12; }
+    .news-x__item-description { font-size: 1.2rem; line-height: 1.3; }
+  }
+  @media (max-width: 700px) {
+    .news-x { display: block; }
+    .news-x__lead { border: 0; border-bottom: 2px solid #000; margin-bottom: .8rem; padding: 0 0 .8rem; }
+    .news-x__lead-description, .news-x__item-description { display: none; }
+  }
+</style>
+
+<div class="layout news-x">
+  {% if items.size > 0 %}
+    {% assign lead = items.first %}
+    {% assign lead_timestamp = lead.pubDate | date: '%s' %}
+    {% assign lead_elapsed = lead_timestamp | minus: now_date | abs | divided_by: 60 %}
+    <article class="news-x__lead">
+      <div class="news-x__kicker">Senaste nytt</div>
+      <span class="news-x__lead-title">{{ lead.title | strip_html }}</span>
+      {% if lead.description != "" %}
+        <div class="news-x__lead-description">{{ lead.description | strip_html | truncate: 360 }}</div>
+      {% endif %}
+      <div class="news-x__time">{{ lead_elapsed }} min sedan</div>
+    </article>
+    <section class="news-x__list">
+      {% for item in items offset: 1 limit: 9 %}
+        <article class="news-x__item">
+          <span class="news-x__item-title">{{ item.title | strip_html }}</span>
+          {% if item.description != "" %}
+            <span class="news-x__item-description clamp--2">{{ item.description | strip_html }}</span>
+          {% endif %}
+        </article>
       {% endfor %}
-    {% else %}
-      <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
-    {% endif %}
-  </div>
+    </section>
+  {% else %}
+    <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
+  {% endif %}
 </div>
 <div class="title_bar">
-  <span class="title">
-    DN.se
-  </span>
-  <span class="instance">Senaste nytt · Uppdaterad {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
+  <span class="title">DN.se</span>
+  <span class="instance">Uppdaterad {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
 </div>

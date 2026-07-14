@@ -3,6 +3,7 @@
 .trmnlp/
 screenshots/
 _local/
+_build/
 
 # Editor files
 .DS_Store
