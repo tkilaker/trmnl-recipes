@@ -1,40 +1,33 @@
-title: Swedish Text-TV
-author: TRMNL Recipes
-category: news
-icon: television
-
+---
 strategy: polling
-
-polling:
-  - https://api.texttv.nu/api/get/{{page_number}}?app=trmnl-texttv&includePlainTextContent=1
-
+no_screen_padding:
+dark_mode:
+static_data:
+polling_verb: GET
+framework_version: 3.1.1
+serverless_language:
+polling_url: https://api.texttv.nu/api/get/{{page_number}}?app=trmnl-texttv&includePlainTextContent=1
+polling_headers:
+polling_body:
+id: 380652
 custom_fields:
-  - keyname: author_bio
-    name: About This Plugin
-    field_type: author_bio
-    description: Swedish Text-TV was created by Tim.
-    github_url: https://github.com/tkilaker/trmnl-recipes
-    email_address: tkilaker@icloud.com
-
-
-  - keyname: page_number
-    name: Text-TV Page Number
-    field_type: integer
-    min: 100
-    max: 899
-    default: 200
-    help_text: Which Text-TV page to display (100-899)
-
-  - keyname: show_subpages
-    name: Show subpages
-    field_type: boolean
-    default: false
-    help_text: Display subpages if available (note - may require additional API calls)
-
-refresh: 15
-
-layouts:
-  - full
-  - half_vertical
-  - half_horizontal
-  - quadrant
+- keyname: author_bio
+  name: About This Plugin
+  field_type: author_bio
+  description: Swedish Text-TV was created by Tim.
+  github_url: https://github.com/tkilaker/trmnl-recipes
+  email_address: tkilaker@icloud.com
+- keyname: page_number
+  name: Text-TV Page Number
+  field_type: number
+  min: 100
+  max: 899
+  default: 200
+  help_text: Which Text-TV page to display (100-899)
+- keyname: show_subpages
+  name: Show subpages
+  field_type: boolean
+  default: false
+  help_text: Display subpages if available (note - may require additional API calls)
+name: Swedish Text-TV
+refresh_interval: 15
