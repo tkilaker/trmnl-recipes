@@ -1,98 +1,103 @@
 {% comment %}
 DN News - Full Layout
-X-first editorial layout. Falls back to a compact single column on the OG.
+Native TRMNL list on OG, expanded to two columns on TRMNL X.
 {% endcomment %}
 
+{% assign show_elapsed = true %}
+{% assign news_limit = 20 %}
 {% assign now_date = 'now' | date: '%s' %}
 
 <style>
-  .layout.news-x {
-    align-items: stretch;
-    display: grid;
-    gap: 3cqw;
-    grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr);
-    justify-content: stretch;
+  @media (min-width: 900px) {
+    .layout.news-list-layout {
+      align-items: stretch;
+      padding: 1cqw 1.5cqw;
+    }
+    .list.news-list {
+      display: grid;
+      gap: 0 3cqw;
+      grid-auto-flow: column;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(10, minmax(0, 1fr));
+      height: 100%;
+      width: 100%;
+    }
+    .news-list .item {
+      align-items: flex-start;
+      min-height: 0;
+      min-width: 0;
+      overflow: hidden;
+      padding: .65cqh 0;
+    }
+    .news-list .content {
+      justify-content: flex-start;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .news-list .title {
+      font-size: 1.85cqw;
+      line-height: 1.12;
+    }
+    .news-list .description {
+      font-size: 1.2cqw;
+      line-height: 1.2;
+      -webkit-line-clamp: 1;
+    }
   }
-  .news-x__lead {
-    border-right: 2px solid #000;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    overflow: hidden;
-    padding-right: 3cqw;
-  }
-  .news-x__kicker, .news-x__time {
-    font-size: 1.7cqw;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-  .news-x__time { margin-top: auto; }
-  .news-x__lead-title {
-    display: block;
-    font-size: 4.4cqw;
-    font-weight: 700;
-    line-height: 1.08;
-    margin: 1.5cqw 0 2cqw;
-  }
-  .news-x__lead-description {
-    font-size: 2.25cqw;
-    line-height: 1.25;
-  }
-  .news-x__list {
-    display: grid;
-    gap: 2cqh 2cqw;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(5, minmax(0, 1fr));
-    min-width: 0;
-  }
-  .news-x__item {
-    border-bottom: 1px solid #000;
-    display: flex;
-    flex-direction: column;
-    gap: 1cqh;
-    min-width: 0;
-    overflow: hidden;
-  }
-  .news-x__item-title {
-    font-size: 2.25cqw;
-    font-weight: 700;
-    line-height: 1.15;
-  }
-  .news-x__item-description {
-    font-size: 1.6cqw;
-    line-height: 1.25;
+
+  @media (max-width: 899px) {
+    .news-list .item:nth-child(n + 11) {
+      display: none;
+    }
   }
 </style>
 
-<div class="layout news-x">
-  {% if items.size > 0 %}
-    {% assign lead = items.first %}
-    {% assign lead_timestamp = lead.pubDate | date: '%s' %}
-    {% assign lead_elapsed = lead_timestamp | minus: now_date | abs | divided_by: 60 %}
-    <article class="news-x__lead">
-      <div class="news-x__kicker">Senaste nytt</div>
-      <span class="news-x__lead-title">{{ lead.title | strip_html }}</span>
-      {% if lead.description != "" %}
-        <div class="news-x__lead-description">{{ lead.description | strip_html | truncate: 360 }}</div>
-      {% endif %}
-      <div class="news-x__time">{{ lead_elapsed }} min sedan</div>
-    </article>
-    <section class="news-x__list">
-      {% for item in items offset: 1 limit: 9 %}
-        <article class="news-x__item">
-          <span class="news-x__item-title">{{ item.title | strip_html }}</span>
-          {% if item.description != "" %}
-            <span class="news-x__item-description clamp--2">{{ item.description | strip_html }}</span>
-          {% endif %}
-        </article>
+<div class="layout news-list-layout">
+  <div class="list news-list">
+    {% if items.size > 0 %}
+      {% for item in items limit: news_limit %}
+        {% liquid
+        if show_elapsed
+          assign pub_date_timestamp = item.pubDate | date: '%s'
+          assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
+          if elapsed > 86400
+            assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
+          elsif elapsed > 3600
+            assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
+          else
+            assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
+          endif
+        endif
+        assign title_text = item.title | strip_html
+        if show_elapsed
+          assign title_text = title_text | append: " (" | append: elapsed_str | append: " sedan)"
+        endif
+        %}
+        <div class="item gap--small">
+          <div class="meta">
+            <span class="index"></span>
+          </div>
+          <div class="content stretch">
+            <div class="flex gap--xsmall">
+              <span class="title title--small clamp--1" data-clamp-lg="2">{{ title_text }}</span>
+            </div>
+            {% if item.description != "" %}
+              <div class="flex gap--xsmall">
+                <span class="description clamp--2" style="word-break: break-word">{{ item.description | strip_html }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
       {% endfor %}
-    </section>
-  {% else %}
-    <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
-  {% endif %}
+    {% else %}
+      <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
+    {% endif %}
+  </div>
 </div>
 <div class="title_bar">
-  <span class="title">DN.se</span>
-  <span class="instance">Uppdaterad {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
+  <span class="title">
+    <img src="https://cdn.dn-static.se/images/favicons/32-NQBIGKWZ.png" width="20" height="20" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+    DN.se
+  </span>
+  <span class="instance">Senaste nytt · Uppdaterad {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
 </div>
