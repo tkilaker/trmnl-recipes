@@ -1,90 +1,118 @@
 {% comment %}
 Sydsvenskan News - Full Layout
-Native TRMNL list on OG, expanded to two columns on TRMNL X.
+Native list on TRMNL OG, newspaper-terminal layout on TRMNL X.
 {% endcomment %}
 
-{% assign show_elapsed = true %}
 {% assign news_limit = 20 %}
 {% assign now_date = 'now' | date: '%s' %}
 
 <style>
+  .news-x { display: none; }
+
   @media (min-width: 900px) {
-    .layout.news-list-layout {
+    .news-og { display: none; }
+    .layout.news-layout {
       align-items: stretch;
-      padding: 1cqw 1.5cqw;
+      padding: 1.8cqw 2.2cqw 1.2cqw;
     }
-    .list.news-list {
+    .news-x {
       display: grid;
-      gap: 0 3cqw;
       grid-auto-flow: column;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-rows: repeat(10, minmax(0, 1fr));
+      grid-template-rows: repeat(8, minmax(0, 1fr));
+      column-gap: 4.4cqw;
       height: 100%;
+      position: relative;
       width: 100%;
     }
-    .news-list .item {
-      align-items: flex-start;
+    .news-x::after {
+      background: #000;
+      content: "";
+      height: 100%;
+      left: 50%;
+      opacity: .22;
+      position: absolute;
+      top: 0;
+      width: 1px;
+    }
+    .news-story {
+      border-top: 1px solid #000;
+      display: grid;
+      gap: 1.25cqw;
+      grid-template-columns: 4.2cqw minmax(0, 1fr);
       min-height: 0;
+      overflow: hidden;
+      padding: .8cqh 0 .65cqh;
+    }
+    .news-key {
+      display: flex;
+      flex-direction: column;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 1.05cqw;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      letter-spacing: .02em;
+      line-height: 1.25;
+      padding-top: .15cqh;
+      text-transform: uppercase;
+    }
+    .news-number { font-size: 1.35cqw; }
+    .news-age { color: #555; }
+    .news-copy {
       min-width: 0;
       overflow: hidden;
-      padding: .65cqh 0;
     }
-    .news-list .content {
-      justify-content: flex-start;
-      min-height: 0;
-      overflow: hidden;
-    }
-    .news-list .title {
+    .news-headline {
+      display: -webkit-box;
+      font-family: Georgia, "Times New Roman", serif;
       font-size: 1.85cqw;
-      line-height: 1.12;
+      font-weight: 700;
+      letter-spacing: -.018em;
+      line-height: 1.08;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
-    .news-list .description {
-      font-size: 1.2cqw;
+    .news-deck {
+      color: #333;
+      display: -webkit-box;
+      font-size: 1.08cqw;
       line-height: 1.2;
+      margin-top: .35cqh;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
     }
+    .title_bar { border-top: 2px solid #000; }
   }
 
   @media (max-width: 899px) {
-    .news-list .item:nth-child(n + 11) {
-      display: none;
-    }
+    .news-og .item:nth-child(n + 11) { display: none; }
   }
 </style>
 
-<div class="layout news-list-layout">
-  <div class="list news-list">
+<div class="layout news-layout">
+  <div class="list news-og">
     {% if items.size > 0 %}
       {% for item in items limit: news_limit %}
         {% liquid
-        if show_elapsed
-          assign pub_date_timestamp = item.pubDate | date: '%s'
-          assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
-          if elapsed > 86400
-            assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
-          elsif elapsed > 3600
-            assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
-          else
-            assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
-          endif
+        assign pub_date_timestamp = item.pubDate | date: '%s'
+        assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
+        if elapsed > 86400
+          assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
+        elsif elapsed > 3600
+          assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
+        else
+          assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
         endif
-        assign title_text = item.title | strip_html
-        if show_elapsed
-          assign title_text = title_text | append: " (" | append: elapsed_str | append: " sedan)"
-        endif
+        assign title_text = item.title | strip_html | append: " (" | append: elapsed_str | append: " sedan)"
         %}
         <div class="item gap--small">
-          <div class="meta">
-            <span class="index"></span>
-          </div>
+          <div class="meta"><span class="index"></span></div>
           <div class="content stretch">
-            <div class="flex gap--xsmall">
-              <span class="title title--small clamp--1" data-clamp-lg="2">{{ title_text }}</span>
-            </div>
+            <div class="flex gap--xsmall"><span class="title title--small clamp--1">{{ title_text }}</span></div>
             {% if item.description != "" %}
-              <div class="flex gap--xsmall">
-                <span class="description clamp--2" style="word-break: break-word">{{ item.description | strip_html }}</span>
-              </div>
+              <div class="flex gap--xsmall"><span class="description clamp--2" style="word-break: break-word">{{ item.description | strip_html }}</span></div>
             {% endif %}
           </div>
         </div>
@@ -93,11 +121,38 @@ Native TRMNL list on OG, expanded to two columns on TRMNL X.
       <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
     {% endif %}
   </div>
+
+  <div class="news-x">
+    {% for item in items limit: 16 %}
+      {% liquid
+      assign pub_date_timestamp = item.pubDate | date: '%s'
+      assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
+      if elapsed > 86400
+        assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
+      elsif elapsed > 3600
+        assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
+      else
+        assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
+      endif
+      %}
+      <article class="news-story">
+        <div class="news-key">
+          <span class="news-number">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+          <span class="news-age">{{ elapsed_str }}</span>
+        </div>
+        <div class="news-copy">
+          <div class="news-headline">{{ item.title | strip_html }}</div>
+          {% if item.description != "" %}<div class="news-deck">{{ item.description | strip_html }}</div>{% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
 </div>
+
 <div class="title_bar">
   <span class="title">
     <img src="https://raw.githubusercontent.com/tkilaker/trmnl-recipes/main/sydsvenskan-news/icon.png" width="20" height="20" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
     Sydsvenskan
   </span>
-  <span class="instance">Senaste nytt · Uppdaterad {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
+  <span class="instance">Senaste nytt · {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
 </div>
