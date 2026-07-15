@@ -5,18 +5,48 @@ Native list on TRMNL OG, newspaper-terminal layout on TRMNL X.
 
 {% assign news_limit = 20 %}
 {% assign now_date = 'now' | date: '%s' %}
+{% assign display_count = items.size %}
+{% if display_count > 16 %}{% assign display_count = 16 %}{% endif %}
 
 <style>
-  .news-x { display: none; }
+  .news-x, .news-x-header { display: none; }
 
   @media (min-width: 900px) {
     .news-og { display: none; }
     .layout.news-layout {
       align-items: stretch;
+      display: flex;
+      flex-direction: column;
       padding: 1.8cqw 2.2cqw 1.2cqw;
     }
+    .news-x-header {
+      align-items: baseline;
+      border-bottom: 2px solid #000;
+      display: flex;
+      flex: 0 0 auto;
+      margin-bottom: .8cqh;
+      padding-bottom: .8cqh;
+    }
+    .news-publication {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2.35cqw;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      line-height: 1;
+    }
+    .news-section,
+    .news-readout {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 1.05cqw;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .news-section { margin-left: 1.4cqw; }
+    .news-readout { margin-left: auto; }
     .news-x {
       display: grid;
+      flex: 1 1 auto;
       grid-auto-flow: column;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: repeat(8, minmax(0, 1fr));
@@ -122,6 +152,12 @@ Native list on TRMNL OG, newspaper-terminal layout on TRMNL X.
     {% endif %}
   </div>
 
+  <header class="news-x-header">
+    <span class="news-publication">Sydsvenskan</span>
+    <span class="news-section">Senaste nytt</span>
+    <span class="news-readout">{{ display_count }} artiklar · uppdaterad {{ 'now' | date: '%H:%M' }}</span>
+  </header>
+
   <div class="news-x">
     {% for item in items limit: 16 %}
       {% liquid
@@ -154,5 +190,5 @@ Native list on TRMNL OG, newspaper-terminal layout on TRMNL X.
     <img src="https://raw.githubusercontent.com/tkilaker/trmnl-recipes/main/sydsvenskan-news/icon.png" width="20" height="20" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
     Sydsvenskan
   </span>
-  <span class="instance">Senaste nytt · {{ 'now' | date: '%Y-%m-%d %H:%M' }}</span>
+  <span class="instance">RSS · 30 min</span>
 </div>
