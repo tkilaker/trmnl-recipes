@@ -9,6 +9,7 @@ serverless_language: node
 polling_url: https://mini.tail899cb0.ts.net/hn.json?source=frontpage-v1
 polling_headers: 
 polling_body: 
+id: 495158
 custom_fields:
 - keyname: author_bio
   name: About This Plugin

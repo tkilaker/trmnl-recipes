@@ -39,7 +39,9 @@ function cleanText(value) {
 function capturedLabel(local) {
   const match = String(local).match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}\.\d{2})$/);
   if (!match) return String(local);
-  const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Stockholm' }).format(new Date());
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Stockholm', year: 'numeric', month: '2-digit', day: '2-digit' })
+    .formatToParts(new Date()).map(part => [part.type, part.value]));
+  const today = `${parts.year}-${parts.month}-${parts.day}`;
   return today === `${match[1]}-${match[2]}-${match[3]}` ? match[4] : `${Number(match[3])}/${Number(match[2])} ${match[4]}`;
 }
 
