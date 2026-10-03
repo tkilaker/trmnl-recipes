@@ -289,13 +289,13 @@ async function fetchJson(url) {
   return response.json();
 }
 
-// Held for 30 minutes so the screen (polled every 15) and /las list the same stories.
+// Top 30, held for 30 minutes so the screen (polled every 15) and /las list the same stories.
 async function refreshHackerNews(force = false) {
   const existing = await load('hn');
   if (!force && existing && Date.now() - Date.parse(existing.capturedAt) < 30 * 60 * 1000) return existing;
-  const ids = (await fetchJson('https://hacker-news.firebaseio.com/v0/topstories.json')).slice(0, 15);
+  const ids = (await fetchJson('https://hacker-news.firebaseio.com/v0/topstories.json')).slice(0, 35);
   const stories = await Promise.all(ids.map(id => fetchJson(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).catch(() => null)));
-  const items = stories.filter(story => story?.title && !story.dead && !story.deleted).slice(0, 12).map(story => {
+  const items = stories.filter(story => story?.title && !story.dead && !story.deleted).slice(0, 30).map(story => {
     const hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
     const url = story.url || hnUrl;
     return {
@@ -304,6 +304,7 @@ async function refreshHackerNews(force = false) {
       hnUrl,
       domain: new URL(url).hostname.replace(/^www\./, ''),
       score: story.score || 0,
+      by: story.by || '',
       comments: story.descendants || 0
     };
   });
@@ -329,9 +330,9 @@ async function refreshAll(force = false) {
 }
 
 const readingSections = [
-  { key: 'hn', slug: 'hn', name: 'Hacker News', count: 12 },
-  { key: 'dn', slug: 'dn', name: 'Dagens Nyheter', count: 7 },
-  { key: 'sydsvenskan', slug: 'syd', name: 'Sydsvenskan', count: 7 }
+  { key: 'hn', slug: 'hn', name: 'Hacker News', count: 30 },
+  { key: 'dn', slug: 'dn', name: 'Dagens Nyheter', count: 10 },
+  { key: 'sydsvenskan', slug: 'syd', name: 'Sydsvenskan', count: 10 }
 ];
 
 function escapeHtml(value = '') {

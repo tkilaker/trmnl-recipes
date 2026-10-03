@@ -30,7 +30,7 @@ Endpoints, available only on the Mac mini:
 
 - `http://127.0.0.1:8787/dn.json`
 - `http://127.0.0.1:8787/sydsvenskan.json`
-- `http://127.0.0.1:8787/hn.json` (Hacker News top 12, held for 30 minutes)
+- `http://127.0.0.1:8787/hn.json` (Hacker News top 30, held for 30 minutes)
 - `http://127.0.0.1:8787/las` (`/las/hn`, `/las/dn`, `/las/syd`)
 - `http://127.0.0.1:8787/healthz`
 
