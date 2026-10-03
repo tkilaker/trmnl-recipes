@@ -94,7 +94,7 @@ function absoluteUrl(value, origin) {
 
 function articleUrl(url) {
   if (!url.startsWith('https://www.dn.se/') && !url.startsWith('https://www.sydsvenskan.se/')) return false;
-  return !/^\/(brandstudio|om-sydsvenskan|om-dn)\//.test(new URL(url).pathname) && !/\/(direkt|spel|nyhetsbrev|prenumerera|sok|om)\/?($|\?)/.test(new URL(url).pathname);
+  return !/^\/(brandstudio|om-sydsvenskan|om-dn)\/|tillgang-till-dn|prenumer/.test(new URL(url).pathname) && !/\/(direkt|spel|nyhetsbrev|prenumerera|sok|om)\/?($|\?)/.test(new URL(url).pathname);
 }
 
 function imageUrl(context) {
