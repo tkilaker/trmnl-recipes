@@ -1,135 +1,83 @@
 {% comment %}
-DN News - Full Layout
-Editorial front page for TRMNL X, condensed edition for the original display.
-Numbers match mini.tail899cb0.ts.net/las/dn, which the QR code opens.
+Dagens Nyheter - Full Layout
+Same list style as TRMNL's native Hacker News plugin, plus a QR code to
+mini.tail899cb0.ts.net/las/dn where the same numbers link to each story.
 {% endcomment %}
 
 <style>
-  @font-face {
-    font-family: "DN Serif";
-    font-style: normal;
-    font-weight: 600 800;
-    src: url("https://cdn.dn-static.se/fonts/DNSerif-1-600-Variable-CHUYIAFV.woff2") format("woff2");
-  }
-  @font-face {
-    font-family: "DN Sans";
-    font-style: normal;
-    font-weight: 500 800;
-    src: url("https://cdn.dn-static.se/fonts/DNSans-1-500-Variable-VAP36PT4.woff2") format("woff2");
-  }
-  .news-paper { --serif: "DN Serif", Georgia, "Times New Roman", serif; --sans: "DN Sans", Arial, Helvetica, sans-serif; align-items: stretch; display: flex; flex-direction: column; }
-  .lines { -webkit-box-orient: vertical; display: -webkit-box; overflow: hidden; }
-  .l1 { -webkit-line-clamp: 1; } .l2 { -webkit-line-clamp: 2; } .l3 { -webkit-line-clamp: 3; } .l4 { -webkit-line-clamp: 4; } .l5 { -webkit-line-clamp: 5; }
-  .ingress { font-family: var(--sans); hyphens: auto; }
-  .kicker { font-family: var(--sans); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-  .kicker b { border: 1.5px solid #000; padding: 0 .3em; }
-  .media { background: #ddd; margin: 0; min-height: 0; overflow: hidden; position: relative; }
-  .media img { filter: grayscale(1) contrast(1.15); height: 100%; object-fit: cover; width: 100%; }
-  .qr { background: #fff; bottom: 0; display: block; height: 87px; position: absolute; right: 0; width: 87px; }
-  .news-x { display: none; }
-  .news-empty { align-items: center; display: flex; flex: 1; font-size: 3cqw; font-weight: 700; }
-
-  .news-og { display: flex; flex: 1; flex-direction: column; min-height: 0; }
-  .news-og__masthead { align-items: baseline; border-bottom: 3px double #000; display: flex; justify-content: space-between; padding-bottom: .8cqh; }
-  .news-og__brand { font-family: var(--serif); font-size: 3.6cqw; font-weight: 700; letter-spacing: -.04em; }
-  .news-og__time { font-family: var(--sans); font-size: 1.9cqw; font-weight: 700; margin-right: 1cqw; }
-  .news-og__lead { border-bottom: 2px solid #000; display: grid; flex: 0 0 47%; gap: 2cqw; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); min-height: 0; padding: 1.4cqh 0; }
-  .news-og__lead-copy { align-self: center; min-width: 0; }
-  .news-og__lead .kicker { font-size: 1.5cqw; }
-  .news-og__lead-title { font-family: var(--serif); font-size: 3.4cqw; font-weight: 700; letter-spacing: -.03em; line-height: 1.02; margin: .8cqh 0; }
-  .news-og__lead-description { font-size: 1.9cqw; line-height: 1.18; }
-  .news-og__items { display: grid; flex: 1; grid-template-rows: repeat(4, minmax(0, 1fr)); min-height: 0; }
-  .news-og__item { align-items: center; border-bottom: 1px solid #000; display: grid; gap: 1.5cqw; grid-template-columns: 3.2cqw minmax(0, 1fr); min-width: 0; }
-  .news-og__item:last-child { border-bottom: 0; }
-  .news-og__number { font-family: var(--serif); font-size: 2.6cqw; font-weight: 700; }
-  .news-og__item-title { font-family: var(--serif); font-size: 2.25cqw; font-weight: 700; letter-spacing: -.02em; line-height: 1.05; }
-  .news-og__item-description { font-size: 1.55cqw; line-height: 1.12; margin-top: .3cqh; }
-
+  .news { display: grid; gap: 0 24px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; height: 100%; width: 100%; }
+  .news__col { display: grid; grid-template-rows: repeat(4, minmax(0, 1fr)); min-height: 0; min-width: 0; }
+  .news__col .item { align-items: center; min-height: 0; overflow: hidden; }
+  .news__col .title, .news__col .description { -webkit-box-orient: vertical; display: -webkit-box; overflow: hidden; }
+  .news__col .title { -webkit-line-clamp: 2; }
+  .news__col .description { -webkit-line-clamp: 1; }
+  .news__x { display: none; }
+  .news__read { align-items: center; align-self: end; display: flex; flex-direction: column; }
+  .news__read svg { display: block; height: 87px; width: 87px; }
+  .news__read .label { margin-top: 4px; }
   @media (min-width: 900px) {
-    .news-og { display: none; }
-    .news-x { display: grid; flex: 1; grid-template-rows: auto minmax(0, .9fr) minmax(0, 1.1fr); min-height: 0; }
-    .qr { height: 116px; width: 116px; }
-    .news-x__masthead { align-items: center; border-bottom: 4px double #000; display: grid; gap: 1.5cqw; grid-template-columns: auto minmax(0, 1fr) auto; padding-bottom: 1.2cqh; }
-    .news-x__mark { border: 2px solid #000; font-family: var(--serif); font-size: 5.2cqw; font-weight: 700; letter-spacing: -.08em; line-height: 1; padding: .4cqh 1cqw .2cqh .6cqw; }
-    .news-x__brand { font-family: var(--serif); font-size: 4.4cqw; font-weight: 700; letter-spacing: -.055em; line-height: .9; white-space: nowrap; }
-    .news-x__time { font-family: var(--sans); font-size: 2.2cqw; font-weight: 700; margin-right: 2cqw; white-space: nowrap; }
-    .news-x__hero { border-bottom: 2px solid #000; display: grid; gap: 3cqw; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); min-height: 0; padding: 1.6cqh 0; }
-    .news-x__lead { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-    .news-x__lead .kicker { font-size: 1.4cqw; }
-    .news-x__lead-title { font-family: var(--serif); font-size: 4cqw; font-weight: 700; letter-spacing: -.045em; line-height: .98; margin: 1.2cqh 0 1.4cqh; }
-    .news-x__lead-description { font-size: 1.75cqw; line-height: 1.22; }
-    .news-x__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); min-height: 0; }
-    .news-x__card { border-bottom: 1px solid #000; border-right: 1px solid #000; display: flex; flex-direction: column; justify-content: flex-start; min-width: 0; padding: 1.6cqh 1.6cqw .8cqh; }
-    .news-x__card:nth-child(3n + 1) { padding-left: 0; }
-    .news-x__card:nth-child(3n) { border-right: 0; padding-right: 0; }
-    .news-x__card:nth-child(n + 4) { border-bottom: 0; }
-    .news-x__card .kicker { font-size: 1.05cqw; margin-bottom: .6cqh; }
-    .news-x__card-title { font-family: var(--serif); font-size: 1.85cqw; font-weight: 700; letter-spacing: -.03em; line-height: 1.02; }
-    .news-x__card-description { font-size: 1.3cqw; line-height: 1.16; margin-top: .6cqh; }
+    .news__og { display: none; }
+    .news__x { display: grid; grid-template-rows: repeat(5, minmax(0, 1fr)); }
+    .news__col .title { -webkit-line-clamp: 2; }
+    .news__col .description { -webkit-line-clamp: 3; }
+    .news__read svg { height: 116px; width: 116px; }
   }
 </style>
 
-{% capture qr %}<svg class="qr" viewBox="0 0 29 29" shape-rendering="crispEdges"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM10 2h2v1h-2zM14 2h2v1h-2zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h4v1h-4zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM12 4h1v1h-1zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM11 5h2v1h-2zM15 5h2v1h-2zM18 5h1v1h-1zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM11 6h1v1h-1zM13 6h1v1h-1zM16 6h2v1h-2zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h2v1h-2zM13 7h4v1h-4zM18 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM12 9h1v1h-1zM16 9h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM8 10h2v1h-2zM11 10h1v1h-1zM14 10h1v1h-1zM16 10h3v1h-3zM21 10h1v1h-1zM24 10h1v1h-1zM26 10h1v1h-1zM2 11h1v1h-1zM4 11h2v1h-2zM7 11h1v1h-1zM11 11h5v1h-5zM18 11h6v1h-6zM26 11h1v1h-1zM2 12h2v1h-2zM6 12h3v1h-3zM10 12h1v1h-1zM13 12h1v1h-1zM16 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM26 12h1v1h-1zM4 13h3v1h-3zM9 13h2v1h-2zM14 13h1v1h-1zM21 13h3v1h-3zM26 13h1v1h-1zM3 14h3v1h-3zM8 14h1v1h-1zM10 14h3v1h-3zM14 14h2v1h-2zM18 14h1v1h-1zM23 14h3v1h-3zM4 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM12 15h1v1h-1zM15 15h1v1h-1zM20 15h1v1h-1zM22 15h2v1h-2zM26 15h1v1h-1zM2 16h2v1h-2zM6 16h1v1h-1zM8 16h2v1h-2zM13 16h2v1h-2zM18 16h2v1h-2zM23 16h1v1h-1zM25 16h1v1h-1zM7 17h1v1h-1zM9 17h2v1h-2zM15 17h2v1h-2zM18 17h1v1h-1zM20 17h1v1h-1zM25 17h1v1h-1zM2 18h3v1h-3zM6 18h3v1h-3zM10 18h2v1h-2zM15 18h1v1h-1zM18 18h5v1h-5zM25 18h2v1h-2zM10 19h1v1h-1zM12 19h2v1h-2zM16 19h3v1h-3zM22 19h5v1h-5zM2 20h7v1h-7zM10 20h1v1h-1zM14 20h1v1h-1zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h2v1h-2zM2 21h1v1h-1zM8 21h1v1h-1zM11 21h1v1h-1zM18 21h1v1h-1zM22 21h3v1h-3zM26 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM15 22h8v1h-8zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM11 23h1v1h-1zM13 23h1v1h-1zM15 23h4v1h-4zM25 23h1v1h-1zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h2v1h-2zM15 24h1v1h-1zM17 24h2v1h-2zM21 24h1v1h-1zM25 24h2v1h-2zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h5v1h-5zM20 25h1v1h-1zM23 25h2v1h-2zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h1v1h-1zM12 26h1v1h-1zM14 26h1v1h-1zM17 26h1v1h-1zM21 26h2v1h-2zM25 26h2v1h-2z"/></svg>{% endcapture %}
-<div class="layout news-paper" lang="sv">
+{% capture qr %}<svg viewBox="0 0 29 29" shape-rendering="crispEdges"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM10 2h2v1h-2zM14 2h2v1h-2zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h4v1h-4zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM12 4h1v1h-1zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM11 5h2v1h-2zM15 5h2v1h-2zM18 5h1v1h-1zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM11 6h1v1h-1zM13 6h1v1h-1zM16 6h2v1h-2zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h2v1h-2zM13 7h4v1h-4zM18 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM12 9h1v1h-1zM16 9h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM8 10h2v1h-2zM11 10h1v1h-1zM14 10h1v1h-1zM16 10h3v1h-3zM21 10h1v1h-1zM24 10h1v1h-1zM26 10h1v1h-1zM2 11h1v1h-1zM4 11h2v1h-2zM7 11h1v1h-1zM11 11h5v1h-5zM18 11h6v1h-6zM26 11h1v1h-1zM2 12h2v1h-2zM6 12h3v1h-3zM10 12h1v1h-1zM13 12h1v1h-1zM16 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM26 12h1v1h-1zM4 13h3v1h-3zM9 13h2v1h-2zM14 13h1v1h-1zM21 13h3v1h-3zM26 13h1v1h-1zM3 14h3v1h-3zM8 14h1v1h-1zM10 14h3v1h-3zM14 14h2v1h-2zM18 14h1v1h-1zM23 14h3v1h-3zM4 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM12 15h1v1h-1zM15 15h1v1h-1zM20 15h1v1h-1zM22 15h2v1h-2zM26 15h1v1h-1zM2 16h2v1h-2zM6 16h1v1h-1zM8 16h2v1h-2zM13 16h2v1h-2zM18 16h2v1h-2zM23 16h1v1h-1zM25 16h1v1h-1zM7 17h1v1h-1zM9 17h2v1h-2zM15 17h2v1h-2zM18 17h1v1h-1zM20 17h1v1h-1zM25 17h1v1h-1zM2 18h3v1h-3zM6 18h3v1h-3zM10 18h2v1h-2zM15 18h1v1h-1zM18 18h5v1h-5zM25 18h2v1h-2zM10 19h1v1h-1zM12 19h2v1h-2zM16 19h3v1h-3zM22 19h5v1h-5zM2 20h7v1h-7zM10 20h1v1h-1zM14 20h1v1h-1zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h2v1h-2zM2 21h1v1h-1zM8 21h1v1h-1zM11 21h1v1h-1zM18 21h1v1h-1zM22 21h3v1h-3zM26 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM15 22h8v1h-8zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM11 23h1v1h-1zM13 23h1v1h-1zM15 23h4v1h-4zM25 23h1v1h-1zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h2v1h-2zM15 24h1v1h-1zM17 24h2v1h-2zM21 24h1v1h-1zM25 24h2v1h-2zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h5v1h-5zM20 25h1v1h-1zM23 25h2v1h-2zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h1v1h-1zM12 26h1v1h-1zM14 26h1v1h-1zM17 26h1v1h-1zM21 26h2v1h-2zM25 26h2v1h-2z"/></svg>{% endcapture %}
+<div class="layout">
   {% if items.size > 0 %}
-    {% assign lead = items.first %}
-    <section class="news-og">
-      <header class="news-og__masthead">
-        <span class="news-og__brand">DAGENS NYHETER.</span>
-        <span class="news-og__time">{{ capturedLabel | default: capturedAt }}</span>
-      </header>
-      <article class="news-og__lead">
-        <figure class="media">
-          {% if lead.image != blank %}<img class="image-dither" src="{{ lead.image }}">{% endif %}
-          {{ qr }}
-        </figure>
-        <div class="news-og__lead-copy">
-          <span class="kicker"><b>1</b> {{ lead.category }}{% if lead.kind == 'latest' %} · JUST NU{% endif %}</span>
-          <span class="news-og__lead-title lines l3">{{ lead.title | strip_html }}</span>
-          <span class="news-og__lead-description ingress lines l4">{{ lead.description | strip_html }}</span>
-        </div>
-      </article>
-      <section class="news-og__items">
-        {% for item in items offset: 1 limit: 4 %}
-          <article class="news-og__item">
-            <span class="news-og__number">{{ forloop.index | plus: 1 }}</span>
-            <div>
-              <span class="news-og__item-title lines l1">{{ item.title | strip_html }}</span>
-              <span class="news-og__item-description ingress lines l1">{{ item.description | strip_html }}</span>
+    <div class="news">
+      {% for group in (0..1) %}
+        {% assign offset = group | times: 4 %}
+        <div class="news__col news__og">
+          {% for item in items offset: offset limit: 4 %}{% assign number = forloop.index | plus: offset %}
+            <div class="item">
+              <div class="meta"><span class="index">{{ number }}</span></div>
+              <div class="content">
+                <span class="title title--small">{{ item.title | strip_html }}</span>
+                <span class="description">{{ item.description | strip_html }}</span>
+                <div class="flex gap--small">
+                  <span class="label label--small label--underline">{{ item.category }}</span>
+                  {% if item.time != blank %}<span class="label label--small label--underline">{{ item.time | slice: -5, 5 }}</span>{% endif %}
+                  {% if item.kind == 'latest' %}<span class="label label--small label--inverted">Just nu</span>{% endif %}
+                </div>
+              </div>
             </div>
-          </article>
-        {% endfor %}
-      </section>
-    </section>
-
-    <section class="news-x">
-      <header class="news-x__masthead">
-        <span class="news-x__mark">DN</span>
-        <span class="news-x__brand">DAGENS NYHETER.</span>
-        <span class="news-x__time">{{ capturedLabel | default: capturedAt }}</span>
-      </header>
-      <section class="news-x__hero">
-        <figure class="media">
-          {% if lead.image != blank %}<img class="image-dither" src="{{ lead.image }}">{% endif %}
-          {{ qr }}
-        </figure>
-        <article class="news-x__lead">
-          <span class="kicker"><b>1</b> {{ lead.category }}{% if lead.kind == 'latest' %} · JUST NU{% endif %}</span>
-          <span class="news-x__lead-title lines l4">{{ lead.title | strip_html }}</span>
-          <span class="news-x__lead-description ingress lines l5">{{ lead.description | strip_html }}</span>
-        </article>
-      </section>
-      <section class="news-x__grid">
-        {% for item in items offset: 1 limit: 6 %}
-          <article class="news-x__card">
-            <span class="kicker"><b>{{ forloop.index | plus: 1 }}</b> {% if item.time != blank %}{{ item.time | slice: -5, 5 }} · {% endif %}{{ item.category }}{% if item.kind == 'latest' %} · JUST NU{% endif %}</span>
-            <span class="news-x__card-title lines l3">{{ item.title | strip_html }}</span>
-            <span class="news-x__card-description ingress lines l4">{{ item.description | strip_html }}</span>
-          </article>
-        {% endfor %}
-      </section>
-    </section>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      {% for group in (0..1) %}
+        {% assign offset = group | times: 5 %}
+        <div class="news__col news__x">
+          {% for item in items offset: offset limit: 5 %}{% assign number = forloop.index | plus: offset %}
+            <div class="item">
+              <div class="meta"><span class="index">{{ number }}</span></div>
+              <div class="content">
+                <span class="title title--small">{{ item.title | strip_html }}</span>
+                <span class="description">{{ item.description | strip_html }}</span>
+                <div class="flex gap--small">
+                  <span class="label label--small label--underline">{{ item.category }}</span>
+                  {% if item.time != blank %}<span class="label label--small label--underline">{{ item.time | slice: -5, 5 }}</span>{% endif %}
+                  {% if item.kind == 'latest' %}<span class="label label--small label--inverted">Just nu</span>{% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <div class="news__read">
+        {{ qr }}
+        <span class="label label--small">Läs mer</span>
+      </div>
+    </div>
   {% else %}
-    <div class="news-empty">INGA NYHETER TILLGÄNGLIGA</div>
+    <span class="title">Inga nyheter tillgängliga</span>
   {% endif %}
+</div>
+
+<div class="title_bar">
+  <img class="image" src="https://trmnl.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTY0OTIxOTcsInB1ciI6ImJsb2JfaWQifX0=--f82df08da29f9ff617f08d4a3c3fec8d122fec5e/icon.png">
+  <span class="title">Dagens Nyheter</span>
+  <span class="instance">Hämtad {{ capturedLabel | default: capturedAt }}</span>
 </div>

@@ -35,12 +35,9 @@ DN's RSS feed exceeds TRMNL's 100 KB polling payload limit (currently ~125 KB). 
 ## Layout
 
 The full-screen layout includes:
-- TRMNL X: a photo-led main story and six supporting stories
-- Original TRMNL: a photo-led main story and four supporting stories
-- A Stockholm-local `HH.MM` capture time in the header (date added when stale)
-- Numbered stories and a QR code to `/las/dn` for reading on the phone
-- Topic and, when supplied, story time on each supporting article
-- A meaningful ingress for every displayed article
+- The list style of TRMNL's native Hacker News plugin: numbered stories in two columns, title, ingress, topic, time and `Just nu` label
+- TRMNL X: ten stories; original TRMNL: eight
+- A QR code to `/las/dn` for reading on the phone, and the capture time in the title bar
 
 ## Installation
 
