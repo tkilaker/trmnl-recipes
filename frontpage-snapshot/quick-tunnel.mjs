@@ -20,7 +20,16 @@ async function saveStatus(url) {
   await rename(temporary, destination);
 }
 
+async function waitReachable(url) {
+  for (let i = 0; i < 30; i++) {
+    try { if ((await fetch(`${url}/healthz`, { signal: AbortSignal.timeout(5000) })).ok) return; } catch {}
+    await new Promise(r => setTimeout(r, 5000));
+  }
+  throw new Error(`${url} not reachable`);
+}
+
 async function updateTrmnl(url) {
+  await waitReachable(url);
   const targets = [
     ['dn', '/dn.json?source=frontpage-v1'],
     ['sydsvenskan', '/sydsvenskan.json?source=frontpage-v1']
