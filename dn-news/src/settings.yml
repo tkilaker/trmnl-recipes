@@ -11,6 +11,13 @@ polling_headers:
 polling_body: 
 id: 176747
 custom_fields:
+- keyname: style
+  name: Utseende
+  field_type: select
+  options:
+  - Med bild: image
+  - Bara lista: list
+  default: image
 - keyname: author_bio
   name: About This Plugin
   field_type: author_bio

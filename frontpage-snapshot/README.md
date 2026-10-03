@@ -82,7 +82,7 @@ The server keeps anonymous daily counters (no IPs) of screen polls and
 reading-page views in `stats.json` next to the cached editions:
 
 ```sh
-ssh mini node ~/dev/trmnl-recipes/frontpage-snapshot/stats.mjs
+ssh mini /opt/homebrew/bin/node ~/dev/trmnl-recipes/frontpage-snapshot/stats.mjs
 ```
 
 Install counts are on the recipe pages ("Connections").
