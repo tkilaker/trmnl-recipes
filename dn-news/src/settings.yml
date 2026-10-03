@@ -6,7 +6,7 @@ static_data:
 polling_verb: GET
 framework_version: 3.1.1
 serverless_language: node
-polling_url: https://www.dn.se/rss/
+polling_url: https://mini.tail899cb0.ts.net/dn.json?source=frontpage-v1
 polling_headers: 
 polling_body: 
 id: 176747
@@ -18,4 +18,4 @@ custom_fields:
   github_url: https://github.com/tkilaker/trmnl-recipes
   email_address: tkilaker@icloud.com
 name: DN Latest News
-refresh_interval: 30
+refresh_interval: 15

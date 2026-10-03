@@ -96,7 +96,7 @@ The `.trmnlp.yml` file contains mock data for local testing with sample news art
 ## Technical Details
 
 - **Strategy:** Polling (RSS feeds)
-- **Refresh:** 30 minutes
+- **Refresh:** 15 minutes
 - **Template Engine:** Liquid
 - **Styling:** TRMNL Framework CSS classes
 - **Icon:** 512x512px Sydsvenskan official knight logo

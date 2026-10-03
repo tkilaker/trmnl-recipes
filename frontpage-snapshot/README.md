@@ -44,32 +44,24 @@ keeps its larger type and shorter four-story list.
 
 ## Runtime on the Mac mini
 
-Two user launch agents keep the setup alive:
+The user launch agent `com.tim.trmnl-frontpage` runs `server.mjs` on
+`127.0.0.1:8787`. Logs live in `/Users/tim/Library/Logs/trmnl-frontpage.log`;
+cached editions live in `/Users/tim/Library/Caches/trmnl-frontpages/`.
 
-| Agent | Responsibility |
-| --- | --- |
-| `com.tim.trmnl-frontpage` | Runs `server.mjs` on `127.0.0.1:8787`. |
-| `com.tim.trmnl-frontpage-tunnel` | Runs `quick-tunnel.mjs`, discovers the tunnel URL and updates the two private TRMNL polling URLs. |
+## Public route
 
-Logs live in `/Users/tim/Library/Logs/trmnl-frontpage.log` and
-`/Users/tim/Library/Logs/trmnl-frontpage-tunnel.log`. Cached editions and the
-current tunnel URL live in `/Users/tim/Library/Caches/trmnl-frontpages/`.
+Tailscale Funnel publishes only that port at a fixed hostname:
 
-The service never listens on the LAN. Cloudflare Tunnel is the only public
-route, and it carries read-only JSON only. No router port-forwarding or public
-Mini IP is required.
+```sh
+tailscale funnel --bg --yes 8787   # persisted by tailscaled across reboots
+tailscale funnel status
+```
 
-## Tunnel state and stable-domain migration
-
-The current account has no Cloudflare zone, so `quick-tunnel.mjs` uses a
-Cloudflare Quick Tunnel. That hostname changes after a tunnel restart, but the
-companion updates the private TRMNL plugin settings automatically.
-
-For the final setup, add an owned domain to Cloudflare, create a named Tunnel,
-and map a single hostname such as `news.example.se` to
-`http://127.0.0.1:8787`. Replace the Quick Tunnel launch agent only after the
-named route responds. The TRMNL polling paths remain `/dn.json` and
-`/sydsvenskan.json`.
+TRMNL polls `https://mini.tail899cb0.ts.net/dn.json?source=frontpage-v1` and
+`https://mini.tail899cb0.ts.net/sydsvenskan.json?source=frontpage-v1`. The
+service is read-only: anything except `/healthz`, `/dn.json` and
+`/sydsvenskan.json` returns 404, and requests never trigger an upstream fetch.
+No router port-forwarding is required.
 
 ## Verification
 
