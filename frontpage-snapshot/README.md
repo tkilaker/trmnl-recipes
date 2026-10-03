@@ -30,6 +30,8 @@ Endpoints, available only on the Mac mini:
 
 - `http://127.0.0.1:8787/dn.json`
 - `http://127.0.0.1:8787/sydsvenskan.json`
+- `http://127.0.0.1:8787/hn.json` (Hacker News top 12, held for 30 minutes)
+- `http://127.0.0.1:8787/las` (`/las/hn`, `/las/dn`, `/las/syd`)
 - `http://127.0.0.1:8787/healthz`
 
 Each endpoint returns `capturedAtLocal`, `edition`, `latestCount` and an
@@ -38,6 +40,15 @@ Each endpoint returns `capturedAtLocal`, `edition`, `latestCount` and an
 one. The transforms in `../dn-news/src/transform.js` and
 `../sydsvenskan-news/src/transform.js` accept this shape as well as the old RSS
 shape, which keeps local preview and marketplace use intact.
+
+## Read more
+
+Each screen carries a QR code for `/las/<screen>`: a phone page listing the
+stories with the same numbers as the display, linking to the article (and the
+HN comments). Paths are case-insensitive so the QR codes can use the compact
+alphanumeric mode. Regenerate a code with
+`qrencode -t ASCII -l M -m 0 HTTPS://MINI.TAIL899CB0.TS.NET/LAS/HN` and convert
+it to the inline SVG path used in the templates. Bookmarking `/las` works too.
 
 The TRMNL X cards reserve up to five lines for the ingress. The older OG layout
 keeps its larger type and shorter four-story list.
@@ -59,7 +70,7 @@ tailscale funnel status
 
 TRMNL polls `https://mini.tail899cb0.ts.net/dn.json?source=frontpage-v1` and
 `https://mini.tail899cb0.ts.net/sydsvenskan.json?source=frontpage-v1`. The
-service is read-only: anything except `/healthz`, `/dn.json` and
+service is read-only: anything except `/healthz`, `/las`, `/hn.json`, `/dn.json` and
 `/sydsvenskan.json` returns 404, and requests never trigger an upstream fetch.
 No router port-forwarding is required.
 

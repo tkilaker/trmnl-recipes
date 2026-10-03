@@ -283,10 +283,93 @@ async function refresh(key, force = false) {
   return snapshot;
 }
 
+async function fetchJson(url) {
+  const response = await fetch(url, { headers: { 'user-agent': USER_AGENT }, signal: AbortSignal.timeout(20_000) });
+  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+  return response.json();
+}
+
+// Held for 30 minutes so the screen (polled every 15) and /las list the same stories.
+async function refreshHackerNews(force = false) {
+  const existing = await load('hn');
+  if (!force && existing && Date.now() - Date.parse(existing.capturedAt) < 30 * 60 * 1000) return existing;
+  const ids = (await fetchJson('https://hacker-news.firebaseio.com/v0/topstories.json')).slice(0, 15);
+  const stories = await Promise.all(ids.map(id => fetchJson(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).catch(() => null)));
+  const items = stories.filter(story => story?.title && !story.dead && !story.deleted).slice(0, 12).map(story => {
+    const hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
+    const url = story.url || hnUrl;
+    return {
+      title: decode(story.title),
+      url,
+      hnUrl,
+      domain: new URL(url).hostname.replace(/^www\./, ''),
+      score: story.score || 0,
+      comments: story.descendants || 0
+    };
+  });
+  if (items.length < 8) throw new Error(`hn: only ${items.length} stories found`);
+  const snapshot = {
+    source: 'Hacker News',
+    capturedAt: new Date().toISOString(),
+    capturedAtLocal: localTimestamp(),
+    items,
+    previousCapturedAtLocal: existing?.capturedAtLocal || '',
+    previousItems: existing?.items || []
+  };
+  await save('hn', snapshot);
+  console.log(`hn: saved ${items.length} stories`);
+  return snapshot;
+}
+
 async function refreshAll(force = false) {
   for (const key of Object.keys(sources)) {
     try { await refresh(key, force); } catch (error) { console.error(`${key}: ${error.message}`); }
   }
+  try { await refreshHackerNews(force); } catch (error) { console.error(`hn: ${error.message}`); }
+}
+
+const readingSections = [
+  { key: 'hn', slug: 'hn', name: 'Hacker News', count: 12 },
+  { key: 'dn', slug: 'dn', name: 'Dagens Nyheter', count: 7 },
+  { key: 'sydsvenskan', slug: 'syd', name: 'Sydsvenskan', count: 7 }
+];
+
+function escapeHtml(value = '') {
+  return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+}
+
+function readingRows(items, count) {
+  return items.slice(0, count).map((entry, index) => {
+    const meta = entry.hnUrl
+      ? `${escapeHtml(entry.domain)} · ${entry.score} p · <a href="${escapeHtml(entry.hnUrl)}">${entry.comments} kommentarer</a>`
+      : escapeHtml(entry.category || '');
+    return `<li><span class="n">${index + 1}</span><div><a class="t" href="${escapeHtml(entry.url)}">${escapeHtml(entry.title)}</a><div class="m">${meta}</div></div></li>`;
+  }).join('');
+}
+
+async function readingPage(first) {
+  const order = [...readingSections].sort((a, b) => (b.slug === first) - (a.slug === first));
+  const sections = await Promise.all(order.map(async section => {
+    const snapshot = await load(section.key);
+    if (!snapshot) return '';
+    const previous = snapshot.previousItems?.length
+      ? `<details><summary>Förra skärmen (${escapeHtml(snapshot.previousCapturedAtLocal.slice(-5))})</summary><ol>${readingRows(snapshot.previousItems, section.count)}</ol></details>`
+      : '';
+    return `<section id="${section.slug}"><h2>${section.name}<small>${escapeHtml(snapshot.capturedAtLocal.slice(-5))}</small></h2><ol>${readingRows(snapshot.items, section.count)}</ol>${previous}</section>`;
+  }));
+  return `<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Läs mer</title><style>
+:root{color-scheme:light dark;--fg:#111;--bg:#fff;--mute:#666;--line:#ddd;--link:#111}
+@media (prefers-color-scheme:dark){:root{--fg:#eee;--bg:#111;--mute:#999;--line:#333;--link:#eee}}
+body{background:var(--bg);color:var(--fg);font:16px/1.35 -apple-system,system-ui,sans-serif;margin:0 auto;max-width:640px;padding:12px 16px 48px}
+h2{align-items:baseline;border-bottom:2px solid var(--fg);display:flex;font:700 22px Georgia,serif;justify-content:space-between;margin:28px 0 0;padding-bottom:6px}
+h2 small{color:var(--mute);font:500 14px system-ui,sans-serif}
+ol{list-style:none;margin:0;padding:0}
+li{border-bottom:1px solid var(--line);display:flex;gap:12px;padding:12px 0}
+.n{color:var(--mute);font-weight:700;min-width:1.4em;text-align:right}
+.t{color:var(--link);display:block;font-weight:600;text-decoration:none}
+.m{color:var(--mute);font-size:14px;margin-top:3px}.m a{color:inherit}
+summary{color:var(--mute);cursor:pointer;padding:12px 0}
+</style></head><body>${sections.join('')}</body></html>`;
 }
 
 function json(response, status, body) {
@@ -297,7 +380,12 @@ function json(response, status, body) {
 const server = createServer(async (request, response) => {
   const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
   if (pathname === '/healthz') return json(response, 200, { ok: true, edition: edition() });
-  const key = pathname.match(/^\/(dn|sydsvenskan)\.json$/)?.[1];
+  const reading = pathname.toLowerCase().match(/^\/las(?:\/(hn|dn|syd))?\/?$/);
+  if (reading) {
+    response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
+    return response.end(await readingPage(reading[1] || 'hn'));
+  }
+  const key = pathname.match(/^\/(dn|sydsvenskan|hn)\.json$/)?.[1];
   if (!key) return json(response, 404, { error: 'not found' });
   const snapshot = await load(key);
   if (!snapshot) return json(response, 503, { error: 'snapshot not ready' });
