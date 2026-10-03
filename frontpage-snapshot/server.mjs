@@ -297,7 +297,7 @@ async function refreshHackerNews(force = false) {
   const stories = await Promise.all(ids.map(id => fetchJson(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).catch(() => null)));
   const items = stories.filter(story => story?.title && !story.dead && !story.deleted).slice(0, 30).map(story => {
     const hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
-    const url = story.url || hnUrl;
+    const url = /^https?:\/\//i.test(story.url || '') ? story.url : hnUrl;
     return {
       title: decode(story.title),
       url,
