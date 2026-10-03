@@ -1,0 +1,68 @@
+{% comment %}
+Hacker News - Full Layout
+Numbers match mini.tail899cb0.ts.net/las/hn, which the QR code opens.
+{% endcomment %}
+
+<style>
+  .layout.hn { --serif: Georgia, "Times New Roman", serif; --sans: Arial, Helvetica, sans-serif; align-items: stretch; display: flex; flex-direction: column; }
+  .hn__masthead { align-items: center; border-bottom: 3px double #000; display: flex; gap: 1.4cqw; padding-bottom: .9cqh; }
+  .hn__mark { background: #000; color: #fff; font-family: var(--sans); font-size: 2.6cqw; font-weight: 700; line-height: 1; padding: .3cqh .8cqw; }
+  .hn__brand { flex: 1; font-family: var(--serif); font-size: 3.6cqw; font-weight: 700; letter-spacing: -.035em; }
+  .hn__time { font-family: var(--sans); font-size: 1.9cqw; font-weight: 700; margin-right: 1cqw; }
+  .hn__body { display: grid; flex: 1; gap: 2cqw; grid-template-columns: minmax(0, 1fr) auto; min-height: 0; }
+  .hn__list { display: grid; grid-template-rows: repeat(8, minmax(0, 1fr)); min-height: 0; }
+  .hn__item { align-items: center; border-bottom: 1px solid #000; display: grid; gap: 1.4cqw; grid-template-columns: 3.2cqw minmax(0, 1fr); min-width: 0; }
+  .hn__item:nth-child(8) { border-bottom: 0; }
+  .hn__item:nth-child(n + 9) { display: none; }
+  .hn__number { font-family: var(--serif); font-size: 2.5cqw; font-weight: 700; text-align: right; }
+  .hn__title { -webkit-box-orient: vertical; -webkit-line-clamp: 1; display: -webkit-box; font-family: var(--serif); font-size: 2.2cqw; font-weight: 700; letter-spacing: -.015em; line-height: 1.1; overflow: hidden; }
+  .hn__meta { font-family: var(--sans); font-size: 1.45cqw; margin-top: .3cqh; white-space: nowrap; }
+  .hn__meta b { font-weight: 700; }
+  .hn__rail { align-items: center; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 1cqh; }
+  .hn__rail svg { display: block; height: 87px; width: 87px; }
+  .hn__rail span { font-family: var(--sans); font-size: 1.3cqw; font-weight: 700; letter-spacing: .06em; margin-top: .8cqh; text-align: center; text-transform: uppercase; }
+  .hn-empty { align-items: center; display: flex; font-size: 3cqw; font-weight: 700; }
+
+  @media (min-width: 900px) {
+    .hn__mark { font-size: 2.4cqw; }
+    .hn__brand { font-size: 3.4cqw; }
+    .hn__list { column-gap: 3cqw; grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, minmax(0, 1fr)); }
+    .hn__item:nth-child(n + 9) { display: grid; }
+    .hn__item:nth-child(8) { border-bottom: 1px solid #000; }
+    .hn__item:nth-child(6), .hn__item:nth-child(12) { border-bottom: 0; }
+    .hn__number { font-size: 2.6cqw; }
+    .hn__title { -webkit-line-clamp: 3; font-size: 2.15cqw; line-height: 1.08; }
+    .hn__meta { font-size: 1.4cqw; margin-top: .6cqh; }
+    .hn__rail svg { height: 116px; width: 116px; }
+    .hn__rail span { font-size: 1cqw; }
+  }
+</style>
+
+<div class="layout hn" lang="sv">
+  <header class="hn__masthead">
+    <span class="hn__mark">Y</span>
+    <span class="hn__brand">Hacker News</span>
+    <span class="hn__time">{{ capturedLabel }}</span>
+  </header>
+  {% if items.size > 0 %}
+    <section class="hn__body">
+      <ol class="hn__list">
+        {% for item in items limit: 12 %}
+          <li class="hn__item">
+            <span class="hn__number">{{ forloop.index }}</span>
+            <div>
+              <span class="hn__title">{{ item.title }}</span>
+              <div class="hn__meta"><b>{{ item.domain }}</b> · {{ item.score }} p · {{ item.comments }} komm.</div>
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+      <aside class="hn__rail">
+        <svg viewBox="0 0 29 29" shape-rendering="crispEdges"><rect width="29" height="29" fill="#fff"/><path d="M2 2h7v1h-7zM10 2h2v1h-2zM15 2h1v1h-1zM18 2h1v1h-1zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM12 4h1v1h-1zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM11 5h1v1h-1zM14 5h3v1h-3zM18 5h1v1h-1zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM11 6h1v1h-1zM14 6h1v1h-1zM16 6h2v1h-2zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h2v1h-2zM15 7h2v1h-2zM18 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM11 9h3v1h-3zM16 9h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM8 10h2v1h-2zM14 10h1v1h-1zM16 10h3v1h-3zM21 10h1v1h-1zM24 10h1v1h-1zM26 10h1v1h-1zM3 11h2v1h-2zM6 11h2v1h-2zM11 11h2v1h-2zM15 11h1v1h-1zM18 11h6v1h-6zM26 11h1v1h-1zM3 12h2v1h-2zM6 12h3v1h-3zM10 12h1v1h-1zM12 12h1v1h-1zM16 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM26 12h1v1h-1zM2 13h2v1h-2zM5 13h1v1h-1zM7 13h1v1h-1zM9 13h1v1h-1zM12 13h1v1h-1zM14 13h1v1h-1zM21 13h3v1h-3zM26 13h1v1h-1zM2 14h2v1h-2zM5 14h1v1h-1zM8 14h1v1h-1zM10 14h1v1h-1zM14 14h2v1h-2zM18 14h1v1h-1zM23 14h3v1h-3zM3 15h5v1h-5zM9 15h1v1h-1zM12 15h1v1h-1zM15 15h1v1h-1zM20 15h1v1h-1zM22 15h2v1h-2zM26 15h1v1h-1zM2 16h2v1h-2zM6 16h1v1h-1zM8 16h1v1h-1zM10 16h5v1h-5zM18 16h2v1h-2zM23 16h1v1h-1zM25 16h1v1h-1zM4 17h1v1h-1zM6 17h2v1h-2zM9 17h1v1h-1zM11 17h1v1h-1zM15 17h2v1h-2zM18 17h1v1h-1zM20 17h1v1h-1zM25 17h1v1h-1zM2 18h2v1h-2zM5 18h2v1h-2zM8 18h3v1h-3zM12 18h1v1h-1zM15 18h1v1h-1zM18 18h5v1h-5zM25 18h2v1h-2zM10 19h4v1h-4zM16 19h3v1h-3zM22 19h5v1h-5zM2 20h7v1h-7zM10 20h3v1h-3zM14 20h1v1h-1zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h2v1h-2zM2 21h1v1h-1zM8 21h1v1h-1zM11 21h1v1h-1zM18 21h1v1h-1zM22 21h3v1h-3zM26 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM12 22h11v1h-11zM24 22h3v1h-3zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM11 23h2v1h-2zM14 23h5v1h-5zM25 23h1v1h-1zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h2v1h-2zM15 24h1v1h-1zM17 24h2v1h-2zM21 24h1v1h-1zM25 24h2v1h-2zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h5v1h-5zM20 25h1v1h-1zM23 25h2v1h-2zM26 25h1v1h-1zM2 26h7v1h-7zM10 26h2v1h-2zM14 26h1v1h-1zM17 26h1v1h-1zM21 26h2v1h-2zM25 26h2v1h-2z"/></svg>
+        <span>Läs mer</span>
+      </aside>
+    </section>
+  {% else %}
+    <div class="hn-empty">INGA NYHETER TILLGÄNGLIGA</div>
+  {% endif %}
+</div>

@@ -24,6 +24,11 @@ Display the latest Swedish news from Sydsvenskan newspaper with article descript
 
 **📦 Published Recipe** - [Install from TRMNL](https://usetrmnl.com/recipes/176724/install) | [View Recipe Details](./sydsvenskan-news/README.md)
 
+### ✅ Hacker News Reading List
+Hacker News top stories, numbered, with a QR code to a phone page that links each story and its comments. Private recipe fed by `frontpage-snapshot`.
+
+[→ View Recipe Details](./hn-news/README.md)
+
 ### ✅ Swedish Text-TV
 Display classic SVT Text-TV (teletext) pages in authentic monospace styling with configurable page numbers and subpage support.
 
