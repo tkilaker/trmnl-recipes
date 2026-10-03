@@ -43,8 +43,10 @@ shape, which keeps local preview and marketplace use intact.
 
 ## Read more
 
-Each screen carries a QR code for `/las/<screen>`: a phone page listing the
-stories with the same numbers as the display, linking to the article (and the
+Each screen carries a QR code for `/las/<screen>`: a phone page listing only
+that screen's stories (most installs have one recipe), with the same numbers as
+the display and a quiet footer link to the other lists. `/las` shows all of them.
+Each story links to the article (and the
 HN comments). Paths are case-insensitive so the QR codes can use the compact
 alphanumeric mode. Regenerate a code with
 `qrencode -t ASCII -l M -m 0 HTTPS://MINI.TAIL899CB0.TS.NET/LAS/HN` and convert

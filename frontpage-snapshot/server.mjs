@@ -348,9 +348,12 @@ function readingRows(items, count) {
   }).join('');
 }
 
-async function readingPage(first) {
-  const order = [...readingSections].sort((a, b) => (b.slug === first) - (a.slug === first));
-  const sections = await Promise.all(order.map(async section => {
+// /las/<slug> shows only that screen's list (most installs have one recipe);
+// /las shows all of them.
+async function readingPage(only) {
+  const shown = only ? readingSections.filter(section => section.slug === only) : readingSections;
+  const others = only ? readingSections.filter(section => section.slug !== only) : [];
+  const sections = await Promise.all(shown.map(async section => {
     const snapshot = await load(section.key);
     if (!snapshot) return '';
     const previous = snapshot.previousItems?.length
@@ -358,7 +361,7 @@ async function readingPage(first) {
       : '';
     return `<section id="${section.slug}"><h2>${section.name}<small>${escapeHtml(snapshot.capturedAtLocal.slice(-5))}</small></h2><ol>${readingRows(snapshot.items, section.count)}</ol>${previous}</section>`;
   }));
-  return `<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Läs mer</title><style>
+  return `<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${only ? `${shown[0].name} · ` : ''}Läs mer</title><style>
 :root{color-scheme:light dark;--fg:#111;--bg:#fff;--mute:#666;--line:#ddd;--link:#111}
 @media (prefers-color-scheme:dark){:root{--fg:#eee;--bg:#111;--mute:#999;--line:#333;--link:#eee}}
 body{background:var(--bg);color:var(--fg);font:16px/1.35 -apple-system,system-ui,sans-serif;margin:0 auto;max-width:640px;padding:12px 16px 48px}
@@ -370,7 +373,8 @@ li{border-bottom:1px solid var(--line);display:flex;gap:12px;padding:12px 0}
 .t{color:var(--link);display:block;font-weight:600;text-decoration:none}
 .m{color:var(--mute);font-size:14px;margin-top:3px}.m a{color:inherit}
 summary{color:var(--mute);cursor:pointer;padding:12px 0}
-</style></head><body>${sections.join('')}</body></html>`;
+footer{color:var(--mute);font-size:14px;margin-top:32px}footer a{color:inherit}
+</style></head><body>${sections.join('')}${others.length ? `<footer>Andra listor: ${others.map(section => `<a href="/las/${section.slug}">${section.name}</a>`).join(' · ')}</footer>` : ''}</body></html>`;
 }
 
 function json(response, status, body) {
@@ -384,7 +388,7 @@ const server = createServer(async (request, response) => {
   const reading = pathname.toLowerCase().match(/^\/las(?:\/(hn|dn|syd))?\/?$/);
   if (reading) {
     response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
-    return response.end(await readingPage(reading[1] || 'hn'));
+    return response.end(await readingPage(reading[1]));
   }
   const key = pathname.match(/^\/(dn|sydsvenskan|hn)\.json$/)?.[1];
   if (!key) return json(response, 404, { error: 'not found' });
