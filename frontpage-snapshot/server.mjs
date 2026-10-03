@@ -377,6 +377,15 @@ footer{color:var(--mute);font-size:14px;margin-top:32px}footer a{color:inherit}
 </style></head><body>${sections.join('')}${others.length ? `<footer>Andra listor: ${others.map(section => `<a href="/las/${section.slug}">${section.name}</a>`).join(' · ')}</footer>` : ''}</body></html>`;
 }
 
+// Anonymous daily counters (no IPs): screen polls and phone reading-page views.
+const stats = (await load('stats')) || {};
+function count(name) {
+  const day = localTimestamp().slice(0, 10);
+  stats[day] ||= {};
+  stats[day][name] = (stats[day][name] || 0) + 1;
+}
+setInterval(() => save('stats', stats).catch(error => console.error(`stats: ${error.message}`)), 60 * 1000).unref();
+
 function json(response, status, body) {
   response.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=300' });
   response.end(`${JSON.stringify(body, null, 2)}\n`);
@@ -387,11 +396,13 @@ const server = createServer(async (request, response) => {
   if (pathname === '/healthz') return json(response, 200, { ok: true, edition: edition() });
   const reading = pathname.toLowerCase().match(/^\/las(?:\/(hn|dn|syd))?\/?$/);
   if (reading) {
+    count(`las:${reading[1] || 'all'}`);
     response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
     return response.end(await readingPage(reading[1]));
   }
   const key = pathname.match(/^\/(dn|sydsvenskan|hn)\.json$/)?.[1];
   if (!key) return json(response, 404, { error: 'not found' });
+  count(`poll:${key}`);
   const snapshot = await load(key);
   if (!snapshot) return json(response, 503, { error: 'snapshot not ready' });
   return json(response, 200, snapshot);

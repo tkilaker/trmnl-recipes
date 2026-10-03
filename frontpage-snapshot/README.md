@@ -76,6 +76,17 @@ service is read-only: anything except `/healthz`, `/las`, `/hn.json`, `/dn.json`
 `/sydsvenskan.json` returns 404, and requests never trigger an upstream fetch.
 No router port-forwarding is required.
 
+## Usage
+
+The server keeps anonymous daily counters (no IPs) of screen polls and
+reading-page views in `stats.json` next to the cached editions:
+
+```sh
+ssh mini node ~/dev/trmnl-recipes/frontpage-snapshot/stats.mjs
+```
+
+Install counts are on the recipe pages ("Connections").
+
 ## Verification
 
 Run this after parser or layout changes:
