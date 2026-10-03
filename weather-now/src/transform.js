@@ -50,7 +50,7 @@ function transform(input) {
       prob: round(hourly.precipitation_probability[i])
     });
   }
-  // 48 hourly bars; 4 mm/h fills the chart, any measurable rain shows at least a sliver.
+  // 48 hourly bars labelled at now, 08 and 17 (when the day is planned); 4 mm/h fills the chart, any measurable rain shows at least a sliver.
   const rain = [];
   for (let i = start; i < Math.min(start + 48, hourly.time.length); i++) {
     const amount = Number(hourly.precipitation[i]) || 0;
@@ -59,8 +59,8 @@ function transform(input) {
       temp: round(hourly.temperature_2m[i]),
       height: amount > 0 ? Math.max(6, Math.min(100, Math.round(amount / 4 * 100))) : 0,
       likely: hourly.precipitation_probability[i] >= 50,
-      midnight: i - start >= 4 && hour === '00',
-      tick: i === start || (i - start >= 4 && (hour === '00' || hour === '12'))
+      midnight: i !== start && hour === '00',
+      tick: i === start || (i - start >= 4 && i - start <= 42 && (hour === '08' || hour === '17'))
         ? `${DAYS[new Date(`${hourly.time[i].slice(0, 10)}T12:00:00`).getDay()]} ${hour}` : ''
     });
   }
