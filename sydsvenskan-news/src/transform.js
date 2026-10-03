@@ -36,6 +36,14 @@ function cleanText(value) {
     .trim();
 }
 
+// "14.27" when captured today in Stockholm, otherwise "2/10 14.27" so a stuck source shows.
+function capturedLabel(local) {
+  const match = String(local).match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}\.\d{2})$/);
+  if (!match) return String(local);
+  const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Stockholm' }).format(new Date());
+  return today === `${match[1]}-${match[2]}-${match[3]}` ? match[4] : `${Number(match[3])}/${Number(match[2])} ${match[4]}`;
+}
+
 function transform(input) {
   const raw = input?.items || input?.channel?.item || input?.rss?.channel?.item || [];
   const items = raw.slice(0, 10).map(it => ({
@@ -47,5 +55,6 @@ function transform(input) {
     kind: cleanText(it.kind),
     time: cleanText(it.time)
   }));
-  return { capturedAt: input?.capturedAtLocal || input?.capturedAt || new Date().toISOString(), latestCount: input?.latestCount || 0, items };
+  const capturedAt = input?.capturedAtLocal || input?.capturedAt || new Date().toISOString();
+  return { capturedAt, capturedLabel: capturedLabel(capturedAt), latestCount: input?.latestCount || 0, items };
 }
