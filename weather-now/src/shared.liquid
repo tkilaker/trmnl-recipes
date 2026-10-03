@@ -9,7 +9,7 @@
   .wx__bar { background: #888; flex: 1; }
   .wx__bar--likely { background: #000; }
   .wx__ticks { display: flex; gap: 1px; margin-top: 2px; }
-  .wx__ticks span { flex: 1; overflow: visible; white-space: nowrap; width: 0; }
+  .wx__ticks > span { display: flex; flex: 1; flex-direction: column; overflow: visible; white-space: nowrap; width: 0; }
   .wx__days .item { margin-top: 6px; }
 </style>
 <div class="wx">
@@ -27,7 +27,7 @@
       {% for r in rain %}<span class="wx__bar{% if r.likely %} wx__bar--likely{% endif %}" style="height: {{ r.height }}%"></span>{% endfor %}
     </div>
     <div class="wx__ticks">
-      {% for r in rain %}<span class="label label--small">{{ r.tick }}</span>{% endfor %}
+      {% for r in rain %}<span>{% if r.tick != blank %}<span class="label label--small">{{ r.tick }}</span><span class="label">{{ r.temp }}°</span>{% endif %}</span>{% endfor %}
     </div>
   </div>
   <div class="wx__days">
