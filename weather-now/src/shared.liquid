@@ -1,37 +1,44 @@
 {% template weather %}
 <style>
-  .wx { display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: space-between; width: 100%; }
-  .wx__now { align-items: center; display: flex; gap: 16px; }
+  .wx { display: flex; flex-direction: column; gap: 14px; height: 100%; width: 100%; }
+  .wx__rain { display: flex; flex: 1; flex-direction: column; min-height: 0; }
+  .wx__now { align-items: center; display: flex; gap: 14px; }
   .wx__facts { display: flex; flex-direction: column; gap: 2px; }
-  .wx__outlook { border-bottom: 1px solid #000; border-top: 1px solid #000; padding: 6px 0; }
-  .wx__grid { display: grid; gap: 2px 10px; }
-  .wx__hours { grid-template-columns: repeat(6, auto); justify-content: space-between; }
-  .wx__days { grid-template-columns: auto 1fr auto auto; }
-  .wx__grid > * { white-space: nowrap; }
-  .wx__dim { opacity: .65; }
+  .wx__head { align-self: flex-start; background: #000; border-radius: 6px; color: #fff; padding: 4px 10px; }
+  .wx__chart { align-items: flex-end; border-bottom: 2px solid #000; display: flex; flex: 1; gap: 1px; margin-top: 8px; min-height: 40px; }
+  .wx__bar { background: #888; flex: 1; }
+  .wx__bar--likely { background: #000; }
+  .wx__ticks { display: flex; gap: 1px; margin-top: 2px; }
+  .wx__ticks span { flex: 1; overflow: visible; white-space: nowrap; width: 0; }
+  .wx__days .item { margin-top: 6px; }
 </style>
 <div class="wx">
   <div class="wx__now">
-    <span class="value value--xxlarge">{{ now.temp }}°</span>
+    <span class="value value--xlarge">{{ now.temp }}°</span>
     <div class="wx__facts">
       <span class="title">{{ now.text }}</span>
-      <span class="label">Känns som {{ now.feels }}°</span>
-      <span class="label">Vind {{ now.wind }} m/s {{ now.dir }}{% if now.gust > now.wind %} (by {{ now.gust }}){% endif %}</span>
-      {% if now.precip != '0' %}<span class="label">Nederbörd {{ now.precip }} mm/h</span>{% endif %}
+      <span class="label label--underline">Känns som {{ now.feels }}° · {{ now.wind }} m/s {{ now.dir }}{% if now.gust > now.wind %}, by {{ now.gust }}{% endif %}</span>
+      {% if now.precip != '0' %}<span class="label label--underline">Nederbörd {{ now.precip }} mm/h</span>{% endif %}
     </div>
   </div>
-  <span class="title title--small wx__outlook">{{ outlook }}</span>
-  <div class="wx__grid wx__hours">
-    {% for h in hours %}<span class="label label--small">{{ h.time }}</span>{% endfor %}
-    {% for h in hours %}<span class="label">{{ h.temp }}°</span>{% endfor %}
-    {% for h in hours %}<span class="label label--small{% if h.prob < 30 %} wx__dim{% endif %}">{% if h.precip != '0' %}{{ h.precip }} mm{% else %}{{ h.prob }}%{% endif %}</span>{% endfor %}
+  <div class="wx__rain">
+    <span class="title title--small wx__head">{{ outlook }}</span>
+    <div class="wx__chart">
+      {% for r in rain %}<span class="wx__bar{% if r.likely %} wx__bar--likely{% endif %}" style="height: {{ r.height }}%"></span>{% endfor %}
+    </div>
+    <div class="wx__ticks">
+      {% for r in rain %}<span class="label label--small">{{ r.tick }}</span>{% endfor %}
+    </div>
   </div>
-  <div class="wx__grid wx__days">
+  <div class="wx__days">
     {% for d in days %}
-      <span class="label">{{ d.name }}</span>
-      <span class="label label--small">{{ d.text }}</span>
-      <span class="label">{{ d.min }}–{{ d.max }}°</span>
-      <span class="label label--small{% if d.prob < 30 %} wx__dim{% endif %}">{% if d.precip != '0' %}{{ d.precip }} mm{% else %}{{ d.prob }}%{% endif %}</span>
+      <div class="item">
+        <div class="meta"><span class="index">{{ forloop.index }}</span></div>
+        <div class="content">
+          <span class="title title--small">{{ d.name }} · {{ d.text }}</span>
+          <span class="label label--small label--underline">{{ d.min }}–{{ d.max }}°{% if d.precip != '0' %} · {{ d.precip }} mm{% endif %} · regnrisk {{ d.prob }}%</span>
+        </div>
+      </div>
     {% endfor %}
   </div>
 </div>

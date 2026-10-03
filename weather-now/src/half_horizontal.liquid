@@ -1,7 +1,8 @@
 <div class="layout layout--col layout--top layout--left">
-  {% render "weather", now: now, outlook: outlook, hours: hours, days: days %}
+  {% render "weather", now: now, outlook: outlook, rain: rain, days: days %}
 </div>
 <div class="title_bar">
+  <svg class="image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="3.5"/><path d="M9 2v1.5M2 9h1.5M4 4l1 1M14 4l-1 1"/><path d="M8 20h10a4 4 0 0 0 0-8 5 5 0 0 0-9.6 1.2A3.4 3.4 0 0 0 8 20z" fill="#fff"/></svg>
   <span class="title">Väder</span>
   <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.place }} · {{ updated }}</span>
 </div>
