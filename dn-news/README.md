@@ -7,23 +7,24 @@ Display the latest Swedish news from Dagens Nyheter (DN) on your TRMNL e-ink dis
 ## Features
 
 - **Official branding** - DN's iconic logo in full layout
-- **Article descriptions** - Shows the first part of each news story, not just headlines
-- **Elapsed time indicators** - Displays "(3h sedan)" directly in headlines
-- **Update timestamps** - Shows when the feed was last refreshed
+- **Editorial front page** - A main story with a longer ingress, plus supporting stories
+- **Full refresh timestamp** - Shows `YYYY-MM-DD HH:MM` so stale updates are obvious
 - **Automatic numbering** - Clean numbered list with index markers
-- **Optimized display** - Shows top 10 news items
-- **Real-time updates** - Fetches from DN RSS feed every 30 minutes
+- **Two-layer edition** - Three latest stories, then a frozen editorial front-page selection
 - **Swedish time formatting** - Displays timestamps in Europe/Stockholm timezone
 - **Full-screen layout** - Optimized for full TRMNL display
 - **E-ink optimized** - High contrast, clear typography perfect for e-ink displays
 
 ## Data Source
 
-This recipe fetches data from DN's main RSS feed:
+Tim's installed recipe polls the local front-page snapshot service described in
+`../frontpage-snapshot/README.md`. It uses DN's own RSS feed only for the three
+items marked `JUST NU`; the main image and remaining stories are taken from the
+editorial front page. The source is refreshed every five minutes and the
+editorial edition is frozen morning and afternoon.
 
-- **Latest News:** `https://www.dn.se/rss/`
-
-Refresh rate: Every 30 minutes
+The default polling URL in the public recipe can still be any RSS URL. The
+transform accepts both RSS and snapshot JSON.
 
 ## Transform (required)
 
@@ -34,10 +35,11 @@ DN's RSS feed exceeds TRMNL's 100 KB polling payload limit (currently ~125 KB). 
 ## Layout
 
 The full-screen layout includes:
-- 10 latest news items with full descriptions
-- DN's official logo and branding
-- "Uppdaterad YYYY-MM-DD HH:MM" timestamp showing last refresh
-- Each article displays: numbered index, headline with elapsed time, and description (2-line clamp)
+- TRMNL X: a photo-led main story and six supporting stories
+- Original TRMNL: a photo-led main story and four supporting stories
+- A Stockholm-local `HÄMTAD YYYY-MM-DD HH.MM` timestamp in the header
+- Topic and, when supplied, story time on each supporting article
+- A meaningful ingress for every displayed article
 
 ## Installation
 
@@ -93,9 +95,9 @@ The `.trmnlp.yml` file contains mock data for local testing with sample news art
 - Update timestamps are formatted in 24-hour format (YYYY-MM-DD HH:MM)
 - Article timestamps show elapsed time: "(5m sedan)", "(3h sedan)", "(2d sedan)"
 
-### Items cut off
-- Descriptions automatically clamp to 2 lines to ensure proper display
-- The layout is optimized to show 10 items comfortably within the display height
+### Text cut off
+- The main story intentionally reserves several lines for its headline and ingress
+- Supporting stories are clamped to keep the front page stable
 
 ## Technical Details
 
