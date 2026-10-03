@@ -1,0 +1,20 @@
+watch:
+  - src/**/*.liquid
+  - src/settings.yml
+  - src/transform.js
+
+
+time_zone: Europe/Stockholm
+
+# By default trmnlp serve uses the cache populated by `bin/poll-real weather-now`.
+# To preview offline (no network), uncomment the block below — `variables`
+# deep-merges on top of the cache and wins for any keys it sets.
+#
+# variables:
+#   items:
+#     - title: "Exempel: en nyhet"
+#       description: "Beskrivning i två rader."
+#       pubDate: "Thu, 14 May 2026 21:50:00 +0200"
+
+custom_fields:
+  place: Lund

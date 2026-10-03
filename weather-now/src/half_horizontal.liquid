@@ -1,0 +1,7 @@
+<div class="layout layout--col layout--top layout--left">
+  {% render "weather", now: now, outlook: outlook, hours: hours, days: days %}
+</div>
+<div class="title_bar">
+  <span class="title">Väder</span>
+  <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.place }} · {{ updated }}</span>
+</div>
