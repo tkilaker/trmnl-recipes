@@ -94,7 +94,7 @@ function absoluteUrl(value, origin) {
 
 function articleUrl(url) {
   if (!url.startsWith('https://www.dn.se/') && !url.startsWith('https://www.sydsvenskan.se/')) return false;
-  return !/\/(direkt|spel|nyhetsbrev|prenumerera|sok|om)\/?($|\?)/.test(new URL(url).pathname);
+  return !/^\/(brandstudio|om-sydsvenskan|om-dn)\//.test(new URL(url).pathname) && !/\/(direkt|spel|nyhetsbrev|prenumerera|sok|om)\/?($|\?)/.test(new URL(url).pathname);
 }
 
 function imageUrl(context) {
@@ -105,6 +105,8 @@ function imageUrl(context) {
 }
 
 function description(context, title) {
+  if (/teaser-j2-text-prefix[^>]*>\s*annons/i.test(context)) return '';
+  context = context.replace(/<span\b[^>]*teaser-j2-text-prefix[^>]*>[\s\S]*?<\/span>/gi, '');
   const paragraphs = [...context.matchAll(/<p\b[^>]*class="[^"]*(?:ds-teaser__text|teaser-j2-text)[^"]*"[^>]*>([\s\S]*?)<\/p>/gi)]
     .map(match => clean(match[1]))
     .filter(text => text.length > 30 && text !== title && !/^(annons|annonsering|prenumerera)/i.test(text));
