@@ -1,194 +1,112 @@
 {% comment %}
 Sydsvenskan News - Full Layout
-Native list on TRMNL OG, newspaper-terminal layout on TRMNL X.
+Editorial front page for TRMNL X, condensed edition for the original display.
 {% endcomment %}
 
-{% assign news_limit = 20 %}
-{% assign now_date = 'now' | date: '%s' %}
-{% assign display_count = items.size %}
-{% if display_count > 16 %}{% assign display_count = 16 %}{% endif %}
-
 <style>
-  .news-x, .news-x-header { display: none; }
+  .layout.news-paper { align-items: stretch; display: flex; flex-direction: column; }
+  .news-x { display: none; }
+  .news-og { display: flex; flex: 1; flex-direction: column; min-height: 0; }
+  .news-og__masthead { align-items: baseline; border-bottom: 2px solid #000; display: flex; justify-content: space-between; padding-bottom: 1cqh; }
+  .news-og__brand { font-family: Georgia, "Times New Roman", serif; font-size: 3.6cqw; font-weight: 700; letter-spacing: -.04em; }
+  .news-og__updated, .news-og__meta { font-family: "NicoClean"; font-size: 1.6cqw; font-weight: 700; letter-spacing: .06em; }
+  .news-og__updated { margin-right: 2cqw; }
+  .news-og__lead { border-bottom: 2px solid #000; display: grid; gap: 2cqw; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); min-height: 0; padding: 1.5cqh 0; }
+  .news-og__lead-media, .news-x__lead-media { background: #ddd; margin: 0; min-height: 0; overflow: hidden; }
+  .news-og__lead-image, .news-x__lead-image { filter: grayscale(1) contrast(1.15); height: 100%; object-fit: cover; width: 100%; }
+  .news-og__lead-copy { align-self: center; min-width: 0; }
+  .news-og__lead-title { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 4.3cqw; font-weight: 700; letter-spacing: -.035em; line-height: 1.01; margin: .5cqh 0 1cqh; }
+  .news-og__lead-description { display: block; font-family: Arial, Helvetica, sans-serif; font-size: 2.05cqw; hyphens: auto; line-height: 1.15; text-align: justify; text-align-last: left; }
+  .news-og__items { display: grid; flex: 1; grid-template-rows: repeat(4, minmax(0, 1fr)); min-height: 0; }
+  .news-og__item { align-items: center; border-bottom: 1px solid #000; display: grid; gap: 1.5cqw; grid-template-columns: 3cqw minmax(0, 1fr); min-width: 0; }
+  .news-og__item:last-child { border-bottom: 0; }
+  .news-og__number { font-family: "NicoClean"; font-size: 1.5cqw; font-weight: 700; }
+  .news-og__item-title { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 2.3cqw; font-weight: 700; letter-spacing: -.02em; line-height: 1.03; }
+  .news-og__item-description { display: block; font-family: Arial, Helvetica, sans-serif; font-size: 1.6cqw; hyphens: auto; line-height: 1.08; margin-top: .25cqh; text-align: justify; text-align-last: left; }
+  .news-empty { align-items: center; display: flex; flex: 1; font-size: 3cqw; font-weight: 700; }
 
   @media (min-width: 900px) {
     .news-og { display: none; }
-    .layout.news-layout {
-      align-items: stretch;
-      display: flex;
-      flex-direction: column;
-      padding: 1.8cqw 2.2cqw 1.2cqw;
-    }
-    .news-x-header {
-      align-items: baseline;
-      border-bottom: 2px solid #000;
-      display: flex;
-      flex: 0 0 auto;
-      margin-bottom: .8cqh;
-      padding-bottom: .8cqh;
-    }
-    .news-publication {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 2.35cqw;
-      font-weight: 700;
-      letter-spacing: -.025em;
-      line-height: 1;
-    }
-    .news-section,
-    .news-readout {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 1.05cqw;
-      font-weight: 700;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-    .news-section { margin-left: 1.4cqw; }
-    .news-readout { margin-left: auto; }
-    .news-x {
-      display: grid;
-      flex: 1 1 auto;
-      grid-auto-flow: column;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-rows: repeat(8, minmax(0, 1fr));
-      column-gap: 4.4cqw;
-      height: 100%;
-      position: relative;
-      width: 100%;
-    }
-    .news-x::after {
-      background: #000;
-      content: "";
-      height: 100%;
-      left: 50%;
-      opacity: .22;
-      position: absolute;
-      top: 0;
-      width: 1px;
-    }
-    .news-story {
-      border-top: 1px solid #000;
-      display: grid;
-      gap: 1.25cqw;
-      grid-template-columns: 4.2cqw minmax(0, 1fr);
-      min-height: 0;
-      overflow: hidden;
-      padding: .8cqh 0 .65cqh;
-    }
-    .news-key {
-      display: flex;
-      flex-direction: column;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 1.05cqw;
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-      letter-spacing: .02em;
-      line-height: 1.25;
-      padding-top: .15cqh;
-      text-transform: uppercase;
-    }
-    .news-number { font-size: 1.35cqw; }
-    .news-age { color: #555; }
-    .news-copy {
-      min-width: 0;
-      overflow: hidden;
-    }
-    .news-headline {
-      display: -webkit-box;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.85cqw;
-      font-weight: 700;
-      letter-spacing: -.018em;
-      line-height: 1.08;
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-    .news-deck {
-      color: #333;
-      display: -webkit-box;
-      font-size: 1.08cqw;
-      line-height: 1.2;
-      margin-top: .35cqh;
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-    }
-    .title_bar { border-top: 2px solid #000; }
-  }
-
-  @media (max-width: 899px) {
-    .news-og .item:nth-child(n + 11) { display: none; }
+    .news-x { display: grid; flex: 1; grid-template-rows: auto minmax(0, .82fr) minmax(0, 1.18fr); min-height: 0; }
+    .news-x__masthead { align-items: center; border-bottom: 2px solid #000; display: grid; gap: 1.5cqw; grid-template-columns: 13.2cqw minmax(0, 1fr) auto; padding-bottom: 1.5cqh; }
+    .news-x__mark { align-items: center; border: 2px solid #000; display: flex; font-family: Georgia, "Times New Roman", serif; font-size: 5.1cqw; font-weight: 700; height: 9cqh; justify-content: center; letter-spacing: -.065em; line-height: 1; overflow: hidden; padding: 0 .75cqw; }
+    .news-x__brand { font-family: Georgia, "Times New Roman", serif; font-size: 4.4cqw; font-weight: 700; letter-spacing: -.055em; line-height: .9; white-space: nowrap; }
+    .news-x__status { font-family: Arial, Helvetica, sans-serif; font-size: 1.45cqw; font-weight: 500; letter-spacing: 0; margin-right: 3cqw; white-space: nowrap; }
+    .news-x__hero { border-bottom: 1px solid #000; display: grid; gap: 3cqw; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); min-height: 0; padding: 1.5cqh 0; }
+    .news-x__lead-media { border: 0; }
+    .news-x__lead { border: 0; display: flex; flex-direction: column; justify-content: center; padding: 0; }
+    .news-x__meta { font-family: Arial, Helvetica, sans-serif; font-size: 1.55cqw; font-weight: 700; letter-spacing: .08em; }
+    .news-x__lead-title { font-family: Georgia, "Times New Roman", serif; font-size: 4.1cqw; font-weight: 700; letter-spacing: -.055em; line-height: .95; margin: 1cqh 0 1.5cqh; }
+    .news-x__lead-description { font-family: Arial, Helvetica, sans-serif; font-size: 1.7cqw; hyphens: auto; line-height: 1.16; text-align: justify; text-align-last: left; }
+    .news-x__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); min-height: 0; }
+    .news-x__card { border-bottom: 1px solid #000; border-right: 1px solid #000; display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: .8cqh 1.5cqw .55cqh 0; }
+    .news-x__card:nth-child(3n + 2), .news-x__card:nth-child(3n + 3) { padding-left: 1.5cqw; }
+    .news-x__card:nth-child(3n) { border-right: 0; }
+    .news-x__card:nth-child(n + 4) { border-bottom: 0; }
+    .news-x__card-meta { font-family: Arial, Helvetica, sans-serif; font-size: 1.08cqw; font-weight: 700; letter-spacing: .055em; line-height: 1; margin-bottom: .28cqh; text-transform: uppercase; }
+    .news-x__card-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.68cqw; font-weight: 700; letter-spacing: -.03em; line-height: .98; }
+    .news-x__card-description { -webkit-box-orient: vertical; -webkit-line-clamp: 4; display: -webkit-box; font-family: Arial, Helvetica, sans-serif; font-size: 1.28cqw; hyphens: auto; line-height: 1.06; margin-top: .2cqh; text-align: justify; text-align-last: left; }
   }
 </style>
 
-<div class="layout news-layout">
-  <div class="list news-og">
-    {% if items.size > 0 %}
-      {% for item in items limit: news_limit %}
-        {% liquid
-        assign pub_date_timestamp = item.pubDate | date: '%s'
-        assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
-        if elapsed > 86400
-          assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
-        elsif elapsed > 3600
-          assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
-        else
-          assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
-        endif
-        assign title_text = item.title | strip_html | append: " (" | append: elapsed_str | append: " sedan)"
-        %}
-        <div class="item gap--small">
-          <div class="meta"><span class="index"></span></div>
-          <div class="content stretch">
-            <div class="flex gap--xsmall"><span class="title title--small clamp--1">{{ title_text }}</span></div>
-            {% if item.description != "" %}
-              <div class="flex gap--xsmall"><span class="description clamp--2" style="word-break: break-word">{{ item.description | strip_html }}</span></div>
-            {% endif %}
-          </div>
-        </div>
-      {% endfor %}
-    {% else %}
-      <div class="text--sm text--gray-3">Inga nyheter tillgängliga</div>
-    {% endif %}
-  </div>
-
-  <header class="news-x-header">
-    <span class="news-publication">Sydsvenskan</span>
-    <span class="news-section">Senaste nytt</span>
-    <span class="news-readout">{{ display_count }} artiklar · uppdaterad {{ 'now' | date: '%H:%M' }}</span>
-  </header>
-
-  <div class="news-x">
-    {% for item in items limit: 16 %}
-      {% liquid
-      assign pub_date_timestamp = item.pubDate | date: '%s'
-      assign elapsed = pub_date_timestamp | minus: now_date | abs | plus: 300
-      if elapsed > 86400
-        assign elapsed_str = elapsed | divided_by: 86400.0 | round: 1 | replace_last: '.0', '' | append: 'd'
-      elsif elapsed > 3600
-        assign elapsed_str = elapsed | divided_by: 3600 | append: 'h'
-      else
-        assign elapsed_str = elapsed | divided_by: 60 | append: 'm'
-      endif
-      %}
-      <article class="news-story">
-        <div class="news-key">
-          <span class="news-number">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
-          <span class="news-age">{{ elapsed_str }}</span>
-        </div>
-        <div class="news-copy">
-          <div class="news-headline">{{ item.title | strip_html }}</div>
-          {% if item.description != "" %}<div class="news-deck">{{ item.description | strip_html }}</div>{% endif %}
+<div class="layout news-paper" lang="sv">
+  {% if items.size > 0 %}
+    <section class="news-og">
+      <header class="news-og__masthead">
+        <span class="news-og__brand">SYDSVENSKAN</span>
+        <span class="news-og__updated">HÄMTAD {{ capturedAt }}</span>
+      </header>
+      {% assign lead = items.first %}
+      <article class="news-og__lead">
+        <figure class="news-og__lead-media">
+          {% if lead.image != blank %}<img class="news-og__lead-image image-dither" src="{{ lead.image }}">{% endif %}
+        </figure>
+        <div class="news-og__lead-copy">
+          <span class="news-og__meta">{{ lead.category | upcase }} · DAGENS UTVALDA</span>
+          <span class="news-og__lead-title clamp--2">{{ lead.title | strip_html }}</span>
+          <span class="news-og__lead-description clamp--3">{{ lead.description | strip_html }}</span>
         </div>
       </article>
-    {% endfor %}
-  </div>
-</div>
+      <section class="news-og__items">
+        {% for item in items offset: 1 limit: 4 %}
+          <article class="news-og__item">
+            <span class="news-og__number">{{ forloop.index | plus: 1 | prepend: '0' | slice: -2, 2 }}</span>
+            <div>
+              <span class="news-og__item-title clamp--1">{{ item.title | strip_html }}</span>
+              <span class="news-og__item-description clamp--1">{{ item.description | strip_html }}</span>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+    </section>
 
-<div class="title_bar">
-  <span class="title">
-    <img src="https://raw.githubusercontent.com/tkilaker/trmnl-recipes/main/sydsvenskan-news/icon.png" width="20" height="20" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
-    Sydsvenskan
-  </span>
-  <span class="instance">RSS · 30 min</span>
+    <section class="news-x">
+      <header class="news-x__masthead">
+        <span class="news-x__mark">SDS</span>
+        <span class="news-x__brand">SYDSVENSKAN</span>
+        <span class="news-x__status">HÄMTAD {{ capturedAt }}</span>
+      </header>
+      <section class="news-x__hero">
+        <figure class="news-x__lead-media">
+          {% if lead.image != blank %}<img class="news-x__lead-image image-dither" src="{{ lead.image }}">{% endif %}
+        </figure>
+        <article class="news-x__lead">
+          <span class="news-x__meta">{{ lead.category | upcase }} · DAGENS UTVALDA</span>
+          <span class="news-x__lead-title clamp--4">{{ lead.title | strip_html }}</span>
+          <span class="news-x__lead-description clamp--5">{{ lead.description | strip_html }}</span>
+        </article>
+      </section>
+      <section class="news-x__grid">
+        {% for item in items offset: 1 limit: 6 %}
+          <article class="news-x__card">
+            <span class="news-x__card-meta">{% if item.time != blank %}{{ item.time | slice: -5, 5 }} · {% endif %}{{ item.category | upcase }} · {% if item.kind == 'latest' %}JUST NU{% else %}UTVALT{% endif %}</span>
+            <span class="news-x__card-title clamp--3">{{ item.title | strip_html }}</span>
+            <span class="news-x__card-description clamp--4">{{ item.description | strip_html }}</span>
+          </article>
+        {% endfor %}
+      </section>
+    </section>
+  {% else %}
+    <div class="news-empty">INGA NYHETER TILLGÄNGLIGA</div>
+  {% endif %}
 </div>

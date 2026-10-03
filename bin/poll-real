@@ -49,8 +49,14 @@ import sys, json, xml.etree.ElementTree as ET
 def el_to_obj(el):
     children = list(el)
     if not children:
-        return (el.text or '').strip()
-    obj = {}
+        text = (el.text or '').strip()
+        if not el.attrib:
+            return text
+        obj = dict(el.attrib)
+        if text:
+            obj['_text'] = text
+        return obj
+    obj = dict(el.attrib)
     for c in children:
         tag = c.tag.split('}', 1)[-1]
         val = el_to_obj(c)
