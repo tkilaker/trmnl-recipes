@@ -59,7 +59,9 @@ function transform(input) {
       temp: round(hourly.temperature_2m[i]),
       height: amount > 0 ? Math.max(6, Math.min(100, Math.round(amount / 4 * 100))) : 0,
       likely: hourly.precipitation_probability[i] >= 50,
-      tick: i === start ? 'Nu' : i - start < 4 ? '' : hour === '00' ? DAYS[new Date(`${hourly.time[i].slice(0, 10)}T12:00:00`).getDay()] : hour === '12' ? '12' : ''
+      midnight: i - start >= 4 && hour === '00',
+      tick: i === start || (i - start >= 4 && (hour === '00' || hour === '12'))
+        ? `${DAYS[new Date(`${hourly.time[i].slice(0, 10)}T12:00:00`).getDay()]} ${hour}` : ''
     });
   }
   return {

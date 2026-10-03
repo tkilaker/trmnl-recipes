@@ -6,8 +6,11 @@
   .wx__facts { display: flex; flex-direction: column; gap: 2px; }
   .wx__head { align-self: flex-start; background: #000; border-radius: 6px; color: #fff; padding: 4px 10px; }
   .wx__chart { align-items: flex-end; border-bottom: 2px solid #000; display: flex; flex: 1; gap: 1px; margin-top: 8px; min-height: 40px; }
-  .wx__bar { background: #888; flex: 1; }
+  .wx__bar { background: #888; }
   .wx__bar--likely { background: #000; }
+  .wx__slot { align-items: flex-end; align-self: stretch; display: flex; flex: 1; }
+  .wx__slot--day { border-left: 1px dashed #000; }
+  .wx__bar { width: 100%; }
   .wx__ticks { display: flex; gap: 1px; margin-top: 2px; }
   .wx__ticks > span { display: flex; flex: 1; flex-direction: column; overflow: visible; white-space: nowrap; width: 0; }
   .wx__days .item { margin-top: 6px; }
@@ -24,7 +27,7 @@
   <div class="wx__rain">
     <span class="title title--small wx__head">{{ outlook }}</span>
     <div class="wx__chart">
-      {% for r in rain %}<span class="wx__bar{% if r.likely %} wx__bar--likely{% endif %}" style="height: {{ r.height }}%"></span>{% endfor %}
+      {% for r in rain %}<span class="wx__slot{% if r.midnight %} wx__slot--day{% endif %}"><span class="wx__bar{% if r.likely %} wx__bar--likely{% endif %}" style="height: {{ r.height }}%"></span></span>{% endfor %}
     </div>
     <div class="wx__ticks">
       {% for r in rain %}<span>{% if r.tick != blank %}<span class="label label--small">{{ r.tick }}</span><span class="label">{{ r.temp }}°</span>{% endif %}</span>{% endfor %}
