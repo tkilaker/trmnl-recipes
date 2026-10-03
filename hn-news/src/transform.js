@@ -9,10 +9,11 @@ function capturedLabel(local) {
 }
 
 function transform(input) {
-  const items = (input?.items || []).slice(0, 12).map(it => ({
+  const items = (input?.items || []).slice(0, 30).map(it => ({
     title: String(it.title || ''),
     domain: String(it.domain || ''),
     score: Number(it.score) || 0,
+    by: String(it.by || ''),
     comments: Number(it.comments) || 0
   }));
   return { capturedLabel: capturedLabel(input?.capturedAtLocal || ''), items };
