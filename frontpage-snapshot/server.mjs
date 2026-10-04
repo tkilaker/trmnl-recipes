@@ -124,6 +124,26 @@ function metaDescription(html) {
   return '';
 }
 
+// The article page's own ingress (DN .article__lead, Sydsvenskan first
+// .article__preamble). It is public even on paywalled articles.
+function articleIngress(html) {
+  const block = html.match(/<div class="article__lead"[^>]*>([\s\S]*?)<\/div>/i)?.[1]
+    || html.match(/<div class="article__preamble[^"]*"[^>]*>([\s\S]*?)<\/div>/i)?.[1]
+    || '';
+  return clean(block).slice(0, 900);
+}
+
+async function enrichLead(items) {
+  const [lead, ...rest] = items;
+  if (!lead) return items;
+  try {
+    const ingress = articleIngress(await fetchHtml(lead.url));
+    return ingress.length > lead.description.length ? [{ ...lead, description: ingress }, ...rest] : items;
+  } catch {
+    return items;
+  }
+}
+
 async function enrichEditorial(items) {
   return Promise.all(items.map(async entry => {
     if (entry.description.length >= 160) return entry;
@@ -259,7 +279,7 @@ async function refresh(key, force = false) {
   let editorialItems = existing?.editorialItems || existing?.items || [];
   if (force || existing?.edition !== currentEdition) {
     const html = await fetchHtml(source.origin);
-    editorialItems = await enrichEditorial(await source.items(html));
+    editorialItems = await enrichLead(await enrichEditorial(await source.items(html)));
   }
   if (editorialItems.length < 5) throw new Error(`${source.name}: only ${editorialItems.length} editorial candidates found`);
 

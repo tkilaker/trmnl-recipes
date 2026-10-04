@@ -50,7 +50,7 @@ function transform(input) {
   const raw = input?.items || input?.channel?.item || input?.rss?.channel?.item || [];
   const items = raw.slice(0, 10).map(it => ({
     title: cleanText(it.title),
-    description: cleanText(it.description || it.summary || it.abstract).slice(0, 560),
+    description: cleanText(it.description || it.summary || it.abstract).slice(0, 900),
     pubDate: String(it.pubDate || it.published || input?.capturedAt || ''),
     image: imageUrl(it),
     category: cleanText(it.category),

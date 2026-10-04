@@ -30,7 +30,8 @@ where the same numbers link to each story.
     .news__col .title { -webkit-line-clamp: 2; }
     .news__col .description { -webkit-line-clamp: 2; display: -webkit-box; }
     .news--list .news__col .description { -webkit-line-clamp: 3; }
-    .news__lead .description { -webkit-line-clamp: 5; }
+    .news--image { grid-template-rows: minmax(0, 46%) minmax(0, 1fr); }
+    .news__lead .description { -webkit-line-clamp: 8; font-size: var(--description-large-font-size); line-height: var(--description-large-line-height); }
     .news__qr svg { height: 116px; width: 116px; }
   }
 </style>

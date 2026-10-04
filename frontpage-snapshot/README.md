@@ -7,7 +7,8 @@ then exposes a small, checked JSON edition for the two private TRMNL plugins.
 ## Editorial policy
 
 - **Main story**: the first editorially placed story on the newspaper's front
-  page. Its own front-page image is the only large image in the layout.
+  page. Its own front-page image is the only large image in the layout, and its
+  text is the article page's public ingress when that is longer than the teaser.
 - **Three latest**: the three newest entries in each newspaper's official RSS
   feed are placed immediately after the main story and labelled `JUST NU`.
 - **The rest**: selected front-page stories, labelled `UTVALT`.
