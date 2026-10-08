@@ -205,7 +205,7 @@ function latestItems(xml, origin) {
       kind: 'latest',
       time: localTimestamp(new Date(tag(entry, 'pubDate')))
     };
-  }).filter(entry => entry.title && entry.url);
+  }).filter(entry => entry.title && entry.url && entry.image && entry.description.length >= 30);
 }
 
 function uniqueItems(items) {
