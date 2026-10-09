@@ -412,7 +412,8 @@ function json(response, status, body) {
 }
 
 const server = createServer(async (request, response) => {
-  const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
+  const url = new URL(request.url, `http://${request.headers.host}`);
+  const pathname = url.pathname;
   if (pathname === '/healthz') return json(response, 200, { ok: true, edition: edition() });
   const reading = pathname.toLowerCase().match(/^\/las(?:\/(hn|dn|syd))?\/?$/);
   if (reading) {
@@ -422,7 +423,8 @@ const server = createServer(async (request, response) => {
   }
   const key = pathname.match(/^\/(dn|sydsvenskan|hn)\.json$/)?.[1];
   if (!key) return json(response, 404, { error: 'not found' });
-  count(`poll:${key}`);
+  // Tim's own installs send reader=tim; everything else is someone else.
+  count(url.searchParams.get('reader') === 'tim' ? `poll:${key}:tim` : `poll:${key}`);
   const snapshot = await load(key);
   if (!snapshot) return json(response, 503, { error: 'snapshot not ready' });
   return json(response, 200, snapshot);

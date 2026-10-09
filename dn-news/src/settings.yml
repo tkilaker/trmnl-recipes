@@ -6,11 +6,16 @@ static_data:
 polling_verb: GET
 framework_version: 3.1.1
 serverless_language: node
-polling_url: https://mini.tail899cb0.ts.net/dn.json?source=frontpage-v1
+polling_url: https://mini.tail899cb0.ts.net/dn.json?source=frontpage-v1&reader={{ reader }}
 polling_headers: 
 polling_body: 
 id: 176747
 custom_fields:
+- keyname: reader
+  name: Reader tag
+  field_type: string
+  optional: true
+  help_text: Leave empty.
 - keyname: style
   name: Utseende
   field_type: select
