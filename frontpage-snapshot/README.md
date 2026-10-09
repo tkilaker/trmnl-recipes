@@ -71,6 +71,22 @@ tailscale funnel --bg --yes 8787   # persisted by tailscaled across reboots
 tailscale funnel status
 ```
 
+Funnel has lost its public DNS record while `funnel status` still said "on" (2026-10-08);
+only restarting tailscaled brought it back. `funnel-watchdog` checks the record at
+ts.net's authoritative servers every ten minutes and restarts tailscaled when it is gone.
+It runs as root, so install it root-owned:
+
+```sh
+sudo install -d /usr/local/sbin
+sudo install -o root -g wheel -m 755 funnel-watchdog /usr/local/sbin/
+sudo install -o root -g wheel -m 644 com.tim.funnel-watchdog.plist /Library/LaunchDaemons/
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.tim.funnel-watchdog.plist
+log show --last 1d --predicate 'process == "logger"' | grep funnel-watchdog   # restarts
+```
+
+Uptime Kuma on the NAS checks `/healthz` over public DNS (monitor "TRMNL Funnel (public)")
+and mails on failure. A curl from a tailnet machine proves nothing: MagicDNS bypasses Funnel.
+
 TRMNL polls `https://mini.tail899cb0.ts.net/dn.json?source=frontpage-v1` and
 `https://mini.tail899cb0.ts.net/sydsvenskan.json?source=frontpage-v1`. The
 service is read-only: anything except `/healthz`, `/las`, `/hn.json`, `/dn.json` and
