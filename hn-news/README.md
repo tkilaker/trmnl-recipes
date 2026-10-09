@@ -1,7 +1,7 @@
 # Hacker News Reading List
 
 Top Hacker News stories for TRMNL in the style of TRMNL's native Hacker News plugin, numbered, with a QR code that opens
-`https://mini.tail899cb0.ts.net/las/hn` on the phone. That page lists the same
+`https://trmnl.diane-feedback-relay.workers.dev/las/hn` on the phone. That page lists the same
 stories with links to the article and the HN comments.
 
 Data comes from `/hn.json` in `../frontpage-snapshot`, which holds each top-12
