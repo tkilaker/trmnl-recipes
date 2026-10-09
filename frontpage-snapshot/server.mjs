@@ -10,6 +10,10 @@ const HOST = process.env.HOST || '127.0.0.1';
 const CACHE_DIR = process.env.CACHE_DIR || join(homedir(), 'Library', 'Caches', 'trmnl-frontpages');
 const DISPLAY_TIME_ZONE = process.env.DISPLAY_TIME_ZONE || 'Europe/Stockholm';
 const USER_AGENT = 'TimNewsSnapshot/1.0 (+local read-only display)';
+// The editions are pushed to a Cloudflare Worker, which is what TRMNL polls.
+const PUBLISH_URL = process.env.PUBLISH_URL || 'https://trmnl.diane-feedback-relay.workers.dev';
+const PUBLISH_TOKEN = await readFile(join(homedir(), '.config', 'trmnl-frontpage', 'publish-token'), 'utf8')
+  .then(token => token.trim()).catch(() => '');
 
 const sources = {
   dn: {
@@ -347,6 +351,28 @@ async function refreshAll(force = false) {
     try { await refresh(key, force); } catch (error) { console.error(`${key}: ${error.message}`); }
   }
   try { await refreshHackerNews(force); } catch (error) { console.error(`hn: ${error.message}`); }
+  try { await publishAll(); } catch (error) { console.error(`publish: ${error.message}`); }
+}
+
+const published = new Map();
+async function publish(name, body) {
+  if (published.get(name) === body) return;
+  const response = await fetch(`${PUBLISH_URL}/publish/${name}`, {
+    method: 'PUT', headers: { authorization: `Bearer ${PUBLISH_TOKEN}` }, body, signal: AbortSignal.timeout(20_000)
+  });
+  if (!response.ok) throw new Error(`${name}: ${response.status}`);
+  published.set(name, body);
+}
+
+async function publishAll() {
+  if (!PUBLISH_TOKEN) return;
+  for (const key of ['dn', 'sydsvenskan', 'hn']) {
+    const snapshot = await load(key);
+    if (snapshot) await publish(key, `${JSON.stringify(snapshot, null, 2)}\n`);
+  }
+  for (const [name, only] of [['las'], ['las/hn', 'hn'], ['las/dn', 'dn'], ['las/syd', 'syd']]) {
+    await publish(name, await readingPage(only));
+  }
 }
 
 const readingSections = [
