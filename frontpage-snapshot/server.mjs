@@ -44,7 +44,7 @@ const sources = {
       for (const match of html.matchAll(pattern)) {
         const href = absoluteUrl(attribute(match[1], 'href'), this.origin);
         if (!articleUrl(href)) continue;
-        const start = html.lastIndexOf('<div class="teaser-j2-base ', match.index);
+        const start = html.lastIndexOf('<div', html.lastIndexOf('class="teaser-j2-base ', match.index));
         if (start < 0) continue;
         const context = html.slice(start, match.index);
         const title = clean(attribute(context.slice(0, 900), 'data-article-title') || lastTag(context, 'h1|h2|h3'));
