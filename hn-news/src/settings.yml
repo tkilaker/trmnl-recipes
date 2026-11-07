@@ -1,15 +1,18 @@
 ---
 strategy: polling
-no_screen_padding: 
-dark_mode: 
-static_data: 
-polling_verb: GET
+no_screen_padding:
+dark_mode:
+static_data:
+polling_verb: get
 framework_version: 3.1.1
 serverless_language: node
+refresh_interval_floor: ''
 polling_url: https://trmnl.tomrad.se/hn.json?source=frontpage-v1
-polling_headers: 
-polling_body: 
+polling_headers:
+polling_body:
 id: 495158
+oauth_enabled: 'false'
+oauth_pkce_enabled: 'no'
 custom_fields:
 - keyname: author_bio
   name: About This Plugin
@@ -17,4 +20,5 @@ custom_fields:
   description: Hacker News front page with a QR code to the reading list, by Tim.
   github_url: https://github.com/tkilaker/trmnl-recipes
 name: Hacker News Reading List
+description: ''
 refresh_interval: 15

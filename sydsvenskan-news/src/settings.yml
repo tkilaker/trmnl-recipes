@@ -1,15 +1,18 @@
 ---
 strategy: polling
-no_screen_padding: 
-dark_mode: 
-static_data: 
-polling_verb: GET
+no_screen_padding:
+dark_mode:
+static_data:
+polling_verb: get
 framework_version: 3.1.1
 serverless_language: node
+refresh_interval_floor: ''
 polling_url: https://trmnl.tomrad.se/sydsvenskan.json?source=frontpage-v1&reader={{ reader }}
-polling_headers: 
-polling_body: 
+polling_headers:
+polling_body:
 id: 176724
+oauth_enabled: 'false'
+oauth_pkce_enabled: 'no'
 custom_fields:
 - keyname: reader
   name: Reader tag
@@ -30,4 +33,5 @@ custom_fields:
   github_url: https://github.com/tkilaker/trmnl-recipes
   email_address: tkilaker@icloud.com
 name: Sydsvenskan Latest News
+description: ''
 refresh_interval: 15

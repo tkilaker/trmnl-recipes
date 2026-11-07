@@ -80,8 +80,10 @@ for 30 minutes, which means the mini or its service stopped. Uptime Kuma on the 
 
 `trmnl.tomrad.se` is a custom domain on the Worker (zone `tomrad.se`, registered at
 Oderland, DNS on the same Cloudflare account). The old
-`trmnl.diane-feedback-relay.workers.dev` URL stays on, because DN and Sydsvenskan
-installs made before 2026-11-07 still poll it.
+`trmnl.diane-feedback-relay.workers.dev` URL answers every path with a 301 to
+`trmnl.tomrad.se`, except `dn.json` and `sydsvenskan.json`: installs made before
+2026-11-07 still poll those, and TRMNL does not document whether polling follows
+redirects.
 
 ## Usage
 
