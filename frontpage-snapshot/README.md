@@ -29,11 +29,11 @@ screen, so a stuck source is visible.
 
 TRMNL polls a Cloudflare Worker, never the mini (see Publishing below):
 
-- `https://trmnl.diane-feedback-relay.workers.dev/dn.json`
-- `https://trmnl.diane-feedback-relay.workers.dev/sydsvenskan.json`
-- `https://trmnl.diane-feedback-relay.workers.dev/hn.json` (Hacker News top 30, held for 30 minutes)
-- `https://trmnl.diane-feedback-relay.workers.dev/las` (`/las/hn`, `/las/dn`, `/las/syd`)
-- `https://trmnl.diane-feedback-relay.workers.dev/healthz`
+- `https://trmnl.tomrad.se/dn.json`
+- `https://trmnl.tomrad.se/sydsvenskan.json`
+- `https://trmnl.tomrad.se/hn.json` (Hacker News top 30, held for 30 minutes)
+- `https://trmnl.tomrad.se/las` (`/las/hn`, `/las/dn`, `/las/syd`)
+- `https://trmnl.tomrad.se/healthz`
 
 The mini serves the same paths on `http://127.0.0.1:8787` for local checks.
 
@@ -52,7 +52,7 @@ the display and a quiet footer link to the other lists. `/las` shows all of them
 Each story links to the article (and the
 HN comments). Paths are case-insensitive so the QR codes can use the compact
 alphanumeric mode. Regenerate a code with
-`bin/qr-svg HTTPS://TRMNL.DIANE-FEEDBACK-RELAY.WORKERS.DEV/LAS/HN`, which prints
+`bin/qr-svg HTTPS://TRMNL.TOMRAD.SE/LAS/HN`, which prints
 the inline SVG used in the templates. Bookmarking `/las` works too.
 
 The TRMNL X cards reserve up to five lines for the ingress. The older OG layout
@@ -78,8 +78,10 @@ Worker secret `PUBLISH_TOKEN`. Deploy the Worker with `npx wrangler deploy` in
 for 30 minutes, which means the mini or its service stopped. Uptime Kuma on the NAS
 (monitor "TRMNL Worker (mini publishing)") checks it and mails on failure.
 
-The workers.dev subdomain `diane-feedback-relay` is shared with the Diane feedback
-relay and is hardcoded in the Diane app, so it cannot be renamed.
+`trmnl.tomrad.se` is a custom domain on the Worker (zone `tomrad.se`, registered at
+Oderland, DNS on the same Cloudflare account). The old
+`trmnl.diane-feedback-relay.workers.dev` URL stays on, because DN and Sydsvenskan
+installs made before 2026-11-07 still poll it.
 
 ## Usage
 
@@ -97,7 +99,7 @@ node ~/dev/trmnl-recipes/frontpage-snapshot/stats.mjs   # on the mini
 Run this after parser or layout changes:
 
 ```sh
-SNAPSHOT_BASE_URL=https://trmnl.diane-feedback-relay.workers.dev \
+SNAPSHOT_BASE_URL=https://trmnl.tomrad.se \
   node /Users/tim/dev/trmnl-recipes/frontpage-snapshot/validate-snapshot.mjs
 ```
 

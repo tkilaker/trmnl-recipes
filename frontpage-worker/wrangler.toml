@@ -1,7 +1,10 @@
 name = "trmnl"
 main = "worker.js"
 compatibility_date = "2026-10-01"
+# trmnl.tomrad.se is the address everything uses. The workers.dev URL stays on for
+# DN and Sydsvenskan installs made before the move, which kept the old polling URL.
 workers_dev = true
+routes = [{ pattern = "trmnl.tomrad.se", custom_domain = true }]
 
 [[durable_objects.bindings]]
 name = "STORE"

@@ -11,7 +11,7 @@ const CACHE_DIR = process.env.CACHE_DIR || join(homedir(), 'Library', 'Caches', 
 const DISPLAY_TIME_ZONE = process.env.DISPLAY_TIME_ZONE || 'Europe/Stockholm';
 const USER_AGENT = 'TimNewsSnapshot/1.0 (+local read-only display)';
 // The editions are pushed to a Cloudflare Worker, which is what TRMNL polls.
-const PUBLISH_URL = process.env.PUBLISH_URL || 'https://trmnl.diane-feedback-relay.workers.dev';
+const PUBLISH_URL = process.env.PUBLISH_URL || 'https://trmnl.tomrad.se';
 const PUBLISH_TOKEN = await readFile(join(homedir(), '.config', 'trmnl-frontpage', 'publish-token'), 'utf8')
   .then(token => token.trim()).catch(() => '');
 

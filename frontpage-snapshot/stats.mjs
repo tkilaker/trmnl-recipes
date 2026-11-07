@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
 
-const base = process.env.PUBLISH_URL || 'https://trmnl.diane-feedback-relay.workers.dev';
+const base = process.env.PUBLISH_URL || 'https://trmnl.tomrad.se';
 const token = (await readFile(join(homedir(), '.config', 'trmnl-frontpage', 'publish-token'), 'utf8')).trim();
 const stats = await (await fetch(`${base}/stats`, { headers: { authorization: `Bearer ${token}` } })).json();
 const days = Object.keys(stats).sort().slice(-14);
