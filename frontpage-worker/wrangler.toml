@@ -1,9 +1,7 @@
 name = "trmnl"
 main = "worker.js"
 compatibility_date = "2026-10-01"
-# trmnl.tomrad.se is the address everything uses. The workers.dev URL redirects there,
-# except dn.json and sydsvenskan.json for installs made before the move (see worker.js).
-workers_dev = true
+workers_dev = false
 routes = [{ pattern = "trmnl.tomrad.se", custom_domain = true }]
 
 [[durable_objects.bindings]]

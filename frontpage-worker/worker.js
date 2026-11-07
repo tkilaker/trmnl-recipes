@@ -7,18 +7,8 @@ const FEEDS = ['dn', 'sydsvenskan', 'hn'];
 const PAGES = ['las', 'las/hn', 'las/dn', 'las/syd'];
 const STALE_MINUTES = 30;
 
-const HOST = 'trmnl.tomrad.se';
-// DN and Sydsvenskan installs made before the move still poll the workers.dev host, and
-// TRMNL does not document whether its polling follows redirects, so only those feeds stay there.
-const OLD_HOST_FEEDS = /^\/(dn|sydsvenskan)\.json$/i;
-
 export default {
   fetch(request, env) {
-    const url = new URL(request.url);
-    if (url.hostname !== HOST && !OLD_HOST_FEEDS.test(url.pathname)) {
-      url.hostname = HOST;
-      return Response.redirect(url.toString(), 301);
-    }
     return env.STORE.get(env.STORE.idFromName('main')).fetch(request);
   }
 };

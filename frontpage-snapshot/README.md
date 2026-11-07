@@ -79,11 +79,8 @@ for 30 minutes, which means the mini or its service stopped. Uptime Kuma on the 
 (monitor "TRMNL Worker (mini publishing)") checks it and mails on failure.
 
 `trmnl.tomrad.se` is a custom domain on the Worker (zone `tomrad.se`, registered at
-Oderland, DNS on the same Cloudflare account). The old
-`trmnl.diane-feedback-relay.workers.dev` URL answers every path with a 301 to
-`trmnl.tomrad.se`, except `dn.json` and `sydsvenskan.json`: installs made before
-2026-11-07 still poll those, and TRMNL does not document whether polling follows
-redirects.
+Oderland, DNS on the same Cloudflare account). The Worker's workers.dev URL is off;
+`trmnl.tomrad.se` is its only address since 2026-11-07.
 
 ## Usage
 
